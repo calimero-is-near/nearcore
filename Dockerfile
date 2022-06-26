@@ -27,9 +27,7 @@ WORKDIR /near
 COPY . .
 
 ENV PORTABLE=ON
-ARG make_target=
-RUN make CARGO_TARGET_DIR=/tmp/target \
-         "${make_target:?make_target not set}"
+RUN CARGO_TARGET_DIR=/tmp/target cargo build -p neard --release
 
 # Actual image
 FROM ubuntu:18.04
