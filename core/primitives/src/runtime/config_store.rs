@@ -59,10 +59,17 @@ impl RuntimeConfigStore {
         for (protocol_version, diff_bytes) in CONFIG_DIFFS {
             let diff :ParameterTableDiff= diff_bytes.parse().unwrap_or_else(|err| panic!("Failed parsing runtime parameters diff for version {protocol_version}. Error: {err}"));
             params.apply_diff(diff).unwrap_or_else(|err| panic!("Failed applying diff to `RuntimeConfig` for version {protocol_version}. Error: {err}"));
+            #[cfg(not(feature = "calimero_zero_storage"))]
             store.insert(
                 *protocol_version,
                 Arc::new(RuntimeConfig::new(&params).unwrap_or_else(|err| panic!("Failed generating `RuntimeConfig` from parameters for version {protocol_version}. Error: {err}"))),
             );
+            #[cfg(feature = "calimero_zero_storage")]
+            {
+                let mut runtime_config = RuntimeConfig::new(&params).unwrap_or_else(|err| panic!("Failed generating `RuntimeConfig` from parameters for version {protocol_version}. Error: {err}"));
+                runtime_config.fees.storage_usage_config.storage_amount_per_byte = 0;
+                store.insert(*protocol_version, Arc::new(runtime_config));
+            }
         }
 
         if let Some(runtime_config) = genesis_runtime_config {
@@ -254,6 +261,15 @@ mod tests {
             let snapshot_name = format!("testnet_{version}.json");
             let config_view = RuntimeConfigView::from(store.get_config(*version).as_ref().clone());
             insta::assert_json_snapshot!(snapshot_name, config_view);
+        }
+    }
+
+    #[test]
+    #[cfg(feature = "calimero_zero_storage")]
+    fn test_calimero_storage_costs_zero() {
+        let store = RuntimeConfigStore::new(None);
+        for (protocol_version, config) in store.store.iter() {
+            assert!(config.storage_amount_per_byte() == 0);
         }
     }
 }
