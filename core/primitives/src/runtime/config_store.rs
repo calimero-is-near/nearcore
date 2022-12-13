@@ -53,8 +53,17 @@ impl RuntimeConfigStore {
             BASE_CONFIG.parse().expect("Failed parsing base parameter file.");
 
         let mut store = BTreeMap::new();
-        let initial_config = RuntimeConfig::new(&params).unwrap_or_else(|err| panic!("Failed generating `RuntimeConfig` from parameters for base parameter file. Error: {err}"));
-        store.insert(0, Arc::new(initial_config));
+        #[cfg(not(feature = "calimero_zero_storage"))]
+        {
+            let initial_config = RuntimeConfig::new(&params).unwrap_or_else(|err| panic!("Failed generating `RuntimeConfig` from parameters for base parameter file. Error: {err}"));
+            store.insert(0, Arc::new(initial_config));
+        }
+        #[cfg(feature = "calimero_zero_storage")]
+        {
+            let mut initial_config = RuntimeConfig::new(&params).unwrap_or_else(|err| panic!("Failed generating `RuntimeConfig` from parameters for base parameter file. Error: {err}"));
+            initial_config.fees.storage_usage_config.storage_amount_per_byte = 0;
+            store.insert(0, Arc::new(initial_config));
+        }
 
         for (protocol_version, diff_bytes) in CONFIG_DIFFS {
             let diff :ParameterTableDiff= diff_bytes.parse().unwrap_or_else(|err| panic!("Failed parsing runtime parameters diff for version {protocol_version}. Error: {err}"));
@@ -137,6 +146,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(not(feature = "calimero_zero_storage"))]
     fn test_lower_storage_cost() {
         let store = RuntimeConfigStore::new(None);
         let base_cfg = store.get_config(GENESIS_PROTOCOL_VERSION);
@@ -178,6 +188,7 @@ mod tests {
     // Check that for protocol version with lowered data receipt cost, runtime config passed to
     // config store is overridden.
     #[test]
+    #[cfg(not(feature = "calimero_zero_storage"))]
     fn test_override_runtime_config() {
         let store = RuntimeConfigStore::new(None);
         let config = store.get_config(0);
@@ -241,6 +252,7 @@ mod tests {
     /// the new snapshot if it looks right.
     #[test]
     #[cfg(not(feature = "nightly"))]
+    #[cfg(not(feature = "calimero_zero_storage"))]
     fn test_json_unchanged() {
         use crate::views::RuntimeConfigView;
 
@@ -268,8 +280,8 @@ mod tests {
     #[cfg(feature = "calimero_zero_storage")]
     fn test_calimero_storage_costs_zero() {
         let store = RuntimeConfigStore::new(None);
-        for (protocol_version, config) in store.store.iter() {
-            assert!(config.storage_amount_per_byte() == 0);
+        for (_, config) in store.store.iter() {
+            assert_eq!(config.storage_amount_per_byte(), 0u128);
         }
     }
 }
