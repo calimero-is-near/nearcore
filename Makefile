@@ -33,6 +33,10 @@ neard-release: NEAR_RELEASE_BUILD=release
 neard-release:
 	cargo build -p neard --release
 
+neard-release-calimero-zero-storage: NEAR_RELEASE_BUILD=release
+neard-release-calimero-zero-storage:
+	cargo build -F 'calimero_zero_storage' --release -p neard
+
 neard-debug:
 	cargo build -p neard
 
