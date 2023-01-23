@@ -53,16 +53,14 @@ impl RuntimeConfigStore {
             BASE_CONFIG.parse().expect("Failed parsing base parameter file.");
 
         let mut store = BTreeMap::new();
-        let initial_config = RuntimeConfig::new(&params).unwrap_or_else(|err| panic!("Failed generating `RuntimeConfig` from parameters for base parameter file. Error: {err}"));
+        let mut initial_config = RuntimeConfig::new(&params).unwrap_or_else(|err| panic!("Failed generating `RuntimeConfig` from parameters for base parameter file. Error: {err}"));
+        initial_config.storage_amount_per_byte = 0;
         store.insert(0, Arc::new(initial_config));
 
         for (protocol_version, diff_bytes) in CONFIG_DIFFS {
-            let diff :ParameterTableDiff= diff_bytes.parse().unwrap_or_else(|err| panic!("Failed parsing runtime parameters diff for version {protocol_version}. Error: {err}"));
-            params.apply_diff(diff).unwrap_or_else(|err| panic!("Failed applying diff to `RuntimeConfig` for version {protocol_version}. Error: {err}"));
-            store.insert(
-                *protocol_version,
-                Arc::new(RuntimeConfig::new(&params).unwrap_or_else(|err| panic!("Failed generating `RuntimeConfig` from parameters for version {protocol_version}. Error: {err}"))),
-            );
+            let mut runtime_config = RuntimeConfig::new(&params).unwrap_or_else(|err| panic!("Failed generating `RuntimeConfig` from parameters for version {protocol_version}. Error: {err}"));
+            runtime_config.storage_amount_per_byte = 0;
+            store.insert(*protocol_version, Arc::new(runtime_config));
         }
 
         if let Some(runtime_config) = genesis_runtime_config {
