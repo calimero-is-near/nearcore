@@ -7,9 +7,7 @@ pub(crate) struct ParameterTable {
 }
 
 /// Changes made to parameters between versions.
-pub(crate) struct ParameterTableDiff {
-    parameters: BTreeMap<Parameter, (serde_json::Value, serde_json::Value)>,
-}
+pub(crate) struct ParameterTableDiff {}
 
 /// Error returned by ParameterTable::from_txt() that parses a runtime
 /// configuration TXT file.
@@ -23,14 +21,6 @@ pub(crate) enum InvalidConfigError {
     NoSeparator(usize, String),
     #[error("intermediate JSON created by parser does not match `RuntimeConfig`")]
     WrongStructure(#[source] serde_json::Error),
-    #[error("config diff expected to contain old value `{1}` for parameter `{0}`")]
-    OldValueExists(Parameter, String),
-    #[error(
-        "unexpected old value `{1}` for parameter `{0}` in config diff, previous version does not have such a value"
-    )]
-    NoOldValueExists(Parameter, String),
-    #[error("expected old value `{1}` but found `{2}` for parameter `{0}` in config diff")]
-    WrongOldValue(Parameter, String, String),
 }
 
 impl std::str::FromStr for ParameterTable {
@@ -65,42 +55,6 @@ impl ParameterTable {
                 "registrar_account_id": self.get(Parameter::RegistrarAccountId),
             }
         })
-    }
-
-    pub(crate) fn apply_diff(
-        &mut self,
-        diff: ParameterTableDiff,
-    ) -> Result<(), InvalidConfigError> {
-        for (key, (before, after)) in diff.parameters {
-            if before.is_null() {
-                match self.parameters.get(&key) {
-                    Some(serde_json::Value::Null) | None => {
-                        self.parameters.insert(key, after);
-                    }
-                    Some(old_value) => {
-                        return Err(InvalidConfigError::OldValueExists(key, old_value.to_string()))
-                    }
-                }
-            } else {
-                match self.parameters.get(&key) {
-                    Some(serde_json::Value::Null) | None => {
-                        return Err(InvalidConfigError::NoOldValueExists(key, before.to_string()))
-                    }
-                    Some(old_value) => {
-                        if *old_value != before {
-                            return Err(InvalidConfigError::WrongOldValue(
-                                key,
-                                old_value.to_string(),
-                                before.to_string(),
-                            ));
-                        } else {
-                            self.parameters.insert(key, after);
-                        }
-                    }
-                }
-            }
-        }
-        Ok(())
     }
 
     fn transaction_costs_json(&self) -> serde_json::Value {
@@ -173,7 +127,7 @@ impl ParameterTable {
 impl std::str::FromStr for ParameterTableDiff {
     type Err = InvalidConfigError;
     fn from_str(arg: &str) -> Result<ParameterTableDiff, InvalidConfigError> {
-        let parameters = txt_to_key_values(arg)
+        let _parameters = txt_to_key_values(arg)
             .map(|result| {
                 let (typed_key, value) = result?;
                 if let Some((before, after)) = value.split_once("->") {
@@ -192,7 +146,7 @@ impl std::str::FromStr for ParameterTableDiff {
                 }
             })
             .collect::<Result<BTreeMap<_, _>, _>>()?;
-        Ok(ParameterTableDiff { parameters })
+        Ok(ParameterTableDiff {})
     }
 }
 

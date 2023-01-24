@@ -1,5 +1,5 @@
 use crate::runtime::config::RuntimeConfig;
-use crate::runtime::parameter_table::{ParameterTable, ParameterTableDiff};
+use crate::runtime::parameter_table::ParameterTable;
 use crate::types::ProtocolVersion;
 use std::collections::BTreeMap;
 use std::ops::Bound;
@@ -49,7 +49,7 @@ impl RuntimeConfigStore {
     /// runtime config by sequential modifications to the genesis runtime config.
     /// TODO #4775: introduce new protocol version to have the same runtime config for all chains
     pub fn new(genesis_runtime_config: Option<&RuntimeConfig>) -> Self {
-        let mut params: ParameterTable =
+        let params: ParameterTable =
             BASE_CONFIG.parse().expect("Failed parsing base parameter file.");
 
         let mut store = BTreeMap::new();
@@ -57,7 +57,7 @@ impl RuntimeConfigStore {
         initial_config.storage_amount_per_byte = 0;
         store.insert(0, Arc::new(initial_config));
 
-        for (protocol_version, diff_bytes) in CONFIG_DIFFS {
+        for (protocol_version, _diff_bytes) in CONFIG_DIFFS {
             let mut runtime_config = RuntimeConfig::new(&params).unwrap_or_else(|err| panic!("Failed generating `RuntimeConfig` from parameters for version {protocol_version}. Error: {err}"));
             runtime_config.storage_amount_per_byte = 0;
             store.insert(*protocol_version, Arc::new(runtime_config));
