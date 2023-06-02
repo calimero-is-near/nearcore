@@ -55,6 +55,8 @@ impl NeardCmd {
         )
         .local();
 
+        println!("Mirko: Pocetak clia");
+
         info!(
             target: "neard",
             version = crate::NEARD_VERSION,
@@ -420,7 +422,7 @@ impl RunCmd {
         let mut near_config = nearcore::config::load_config(home_dir, genesis_validation)
             .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
 
-        println!("Run command mirko slavko");
+        println!("Mirko: pocetak run commanda");
 
         check_release_build(&near_config.client_config.chain_id);
 
