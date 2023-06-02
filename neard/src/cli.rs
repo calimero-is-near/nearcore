@@ -420,6 +420,8 @@ impl RunCmd {
         let mut near_config = nearcore::config::load_config(home_dir, genesis_validation)
             .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
 
+        println!("Run command mirko slavko");
+
         check_release_build(&near_config.client_config.chain_id);
 
         // Set current version in client config.
