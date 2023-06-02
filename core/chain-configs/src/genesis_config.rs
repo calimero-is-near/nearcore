@@ -255,6 +255,7 @@ impl GenesisConfig {
     /// The string can be a JSON with comments.
     /// It panics if the contents cannot be parsed from JSON to the GenesisConfig structure.
     pub fn from_json(value: &str) -> Self {
+        println!("LA LA LA");
         let json_str_without_comments: String =
             near_config_utils::strip_comments_from_json_str(&value.to_string())
                 .expect("Failed to strip comments from genesis config.");
@@ -467,6 +468,7 @@ impl Genesis {
         path: P,
         genesis_validation: GenesisValidationMode,
     ) -> Result<Self, ValidationError> {
+        println!("DA DA");
         let mut file = File::open(&path).map_err(|_| ValidationError::GenesisFileError {
             error_message: format!(
                 "Could not open genesis config file at path {}.",

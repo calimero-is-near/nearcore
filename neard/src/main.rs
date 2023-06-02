@@ -64,5 +64,6 @@ fn main() -> anyhow::Result<()> {
         "couldn't set the file descriptor limit to {FD_LIMIT}, hard limit = {hard}"
     ))?;
 
+    // MIRKO: izgleda koda je ovo main za sve neard (near deamon) komponente
     NeardCmd::parse_and_run()
 }
