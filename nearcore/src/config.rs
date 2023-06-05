@@ -979,6 +979,8 @@ pub fn init_configs(
     generate_or_load_keys(dir, &config, &chain_id, account_id, test_seed)?;
     match chain_id.as_ref() {
         MAINNET => {
+            println!("Mirko: usao u MAINNET odlomak");
+
             if test_seed.is_some() {
                 bail!("Test seed is not supported for {chain_id}");
             }
@@ -998,6 +1000,8 @@ pub fn init_configs(
             info!(target: "near", "Generated mainnet genesis file in {}", dir.display());
         }
         TESTNET | BETANET => {
+            println!("Mirko: usao u TESTNET | BETANET odlomak");
+
             if test_seed.is_some() {
                 bail!("Test seed is not supported for {chain_id}");
             }
@@ -1070,6 +1074,8 @@ pub fn init_configs(
             info!(target: "near", "Generated for {} network node key and genesis file in {}", chain_id, dir.display());
         }
         _ => {
+            println!("Mirko: usao u TRECI odlomak");
+
             // Create new configuration, key files and genesis for one validator.
             config.network.skip_sync_wait = true;
             if fast {
