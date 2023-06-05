@@ -625,6 +625,7 @@ impl EpochManager {
         last_block_hash: &CryptoHash,
         rng_seed: RngSeed,
     ) -> Result<(), EpochError> {
+        println!("Mirko: pocetak finalize_epoch u kojem se zove calculate_reward");
         let epoch_summary = self.collect_blocks_info(block_info, last_block_hash)?;
         let epoch_info = self.get_epoch_info(block_info.epoch_id())?;
         let epoch_protocol_version = epoch_info.protocol_version();
@@ -649,6 +650,7 @@ impl EpochManager {
             assert!(block_info.timestamp_nanosec() > last_block_in_last_epoch.timestamp_nanosec());
             let epoch_duration =
                 block_info.timestamp_nanosec() - last_block_in_last_epoch.timestamp_nanosec();
+            println!("Mirko: tu se poziva mrtvi rewards kalkulator i u njemu se overridea");
             self.reward_calculator.calculate_reward(
                 validator_block_chunk_stats,
                 &validator_stake,
@@ -719,6 +721,7 @@ impl EpochManager {
                     genesis_epoch_info,
                 )?;
             } else {
+                println!("Mirko: record_block_info");
                 let prev_block_info = self.get_block_info(block_info.prev_hash())?;
 
                 let mut is_epoch_start = false;
