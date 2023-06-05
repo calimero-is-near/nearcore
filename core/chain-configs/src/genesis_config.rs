@@ -494,6 +494,8 @@ impl Genesis {
                 }
             })?;
 
+        println!("Mirko: Genesis: {:?}", genesis);
+
         Self::new_validated(genesis.config, genesis.records, genesis_validation)
     }
 
