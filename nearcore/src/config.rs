@@ -1402,7 +1402,7 @@ pub fn load_config(
     genesis_validation: GenesisValidationMode,
 ) -> anyhow::Result<NearConfig> {
     println!("Mirko: u funkciji load_config raspakiravam jsone");
-    
+
     let mut validation_errors = ValidationErrors::new();
 
     // if config.json has file issues, the program will directly panic

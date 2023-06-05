@@ -469,7 +469,7 @@ impl Genesis {
         path: P,
         genesis_validation: GenesisValidationMode,
     ) -> Result<Self, ValidationError> {
-        println!("DA DA");
+        println!("Mirko: kreira se genesis from_file");
         let mut file = File::open(&path).map_err(|_| ValidationError::GenesisFileError {
             error_message: format!(
                 "Could not open genesis config file at path {}.",
