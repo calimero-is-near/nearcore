@@ -130,6 +130,9 @@ impl NeardCmd {
                 cmd.run(&home_dir, genesis_validation)?;
             }
         };
+
+        println!("Mirko: Kraj clia");
+
         Ok(())
     }
 }
