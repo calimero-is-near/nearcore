@@ -332,6 +332,7 @@ fn check_release_build(chain: &str) {
 
 impl InitCmd {
     pub(super) fn run(self, home_dir: &Path) -> anyhow::Result<()> {
+        println!("Mirko: usao u InitCmd run");
         // TODO: Check if `home` exists. If exists check what networks we already have there.
         if (self.download_genesis || self.download_genesis_url.is_some()) && self.genesis.is_some()
         {
@@ -418,11 +419,11 @@ impl RunCmd {
         verbose_target: Option<&str>,
         o11y_opts: &near_o11y::Options,
     ) {
+        println!("Mirko: pocetak RunCmd run");
+
         // Load configs from home.
         let mut near_config = nearcore::config::load_config(home_dir, genesis_validation)
             .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
-
-        println!("Mirko: pocetak run commanda");
 
         check_release_build(&near_config.client_config.chain_id);
 
@@ -632,6 +633,8 @@ impl LocalnetCmd {
     }
 
     pub(super) fn run(self, home_dir: &Path) {
+        println!("Mirko: usao u LocalnetCmd run");
+
         let tracked_shards = Self::parse_tracked_shards(&self.tracked_shards, self.shards);
 
         nearcore::config::init_testnet_configs(
