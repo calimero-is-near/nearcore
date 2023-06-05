@@ -548,6 +548,7 @@ impl RunCmd {
             let sig = loop {
                 let sig = wait_for_interrupt_signal(home_dir, &mut rx_crash).await;
                 if sig == "SIGHUP" {
+                    println!("Mirko: SIGHUP");
                     let maybe_updateable_configs =
                         nearcore::dyn_config::read_updateable_configs(home_dir);
                     updateable_config_loader.reload(maybe_updateable_configs);
@@ -555,6 +556,8 @@ impl RunCmd {
                     break sig;
                 }
             };
+            println!("Mirko: nakon loopa u run cmdu");
+
             warn!(target: "neard", "{}, stopping... this may take a few minutes.", sig);
             if let Some(handle) = cold_store_loop_handle {
                 handle.stop()
