@@ -53,11 +53,14 @@ impl RewardCalculator {
         println!("Mirko: IDEMO U GAZENJE");
         let use_hardcoded_value = genesis_protocol_version < protocol_version
             && protocol_version >= ENABLE_INFLATION_PROTOCOL_VERSION;
+        println!("Mirko: use_hardcoded_value: {}", use_hardcoded_value);
         let max_inflation_rate =
             if use_hardcoded_value { Rational32::new_raw(1, 20) } else { self.max_inflation_rate };
         let protocol_reward_rate = if use_hardcoded_value {
+            println!("Mirko: protocol_reward_rate gazi sa novim raw vrijednostima");
             Rational32::new_raw(1, 10)
         } else {
+            println!("Mirko: protocol_reward_rate koristi self.protocol_reward_rate");
             self.protocol_reward_rate
         };
         let epoch_total_reward: u128 =
