@@ -421,8 +421,8 @@ impl RunCmd {
     ) {
         println!("Mirko: pocetak RunCmd run");
 
-        println!("Mirko: home dir: ", home_dir.to_str());
-        println!("Mirko: genesis validatiom: ", genesis_validation.clone());
+        println!("Mirko: home dir: {:?}", &home_dir.to_str());
+        println!("Mirko: genesis validatiom: {}", genesis_validation.clone());
 
         // Load configs from home.
         let mut near_config = nearcore::config::load_config(home_dir, genesis_validation)
