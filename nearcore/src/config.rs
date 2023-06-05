@@ -1489,6 +1489,9 @@ pub fn load_config(
         network_signer.unwrap().into(),
         validator_signer,
     )?;
+
+    println!("Mirko: Čini se da se na kraju load_config funkcije vraca cijeli near_config sa raspakirana sva 4 file iz node dira");
+
     Ok(near_config)
 }
 
