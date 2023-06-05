@@ -151,6 +151,7 @@ impl EpochManager {
         store: Store,
         genesis_config: &GenesisConfig,
     ) -> Result<Self, EpochError> {
+        println!("Mirko: tu stvaram epoch managera u new_from_genesis_config");
         let reward_calculator = RewardCalculator::new(genesis_config);
         let all_epoch_config = AllEpochConfig::from(genesis_config);
         Self::new(
@@ -163,6 +164,7 @@ impl EpochManager {
     }
 
     pub fn new_arc_handle(store: Store, genesis_config: &GenesisConfig) -> Arc<EpochManagerHandle> {
+        println!("Mirko: tu stvaram epoch managera");
         Arc::new(Self::new_from_genesis_config(store, genesis_config).unwrap().into_handle())
     }
 

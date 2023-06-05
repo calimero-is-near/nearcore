@@ -212,6 +212,7 @@ pub fn start_with_config_and_synchronization(
     shutdown_signal: Option<broadcast::Sender<()>>,
     config_updater: Option<ConfigUpdater>,
 ) -> anyhow::Result<NearNode> {
+    println!("Mirko: start_with_config_and_synchronization pocetak");
     let storage = open_storage(home_dir, &mut config)?;
     let db_metrics_arbiter = if config.client_config.enable_statistics_export {
         let period = config.client_config.log_summary_period;
