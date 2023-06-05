@@ -488,6 +488,8 @@ impl RunCmd {
             near_config.client_config.max_gas_burnt_view = self.max_gas_burnt_view;
         }
 
+        // TODO: tu dodaj override na genesis za rewards kalkulator
+
         println!("Mirko: neka tocka nakon sta je hrpa configa overrideana");
 
         #[cfg(feature = "sandbox")]

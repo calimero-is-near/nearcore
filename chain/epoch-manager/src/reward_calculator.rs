@@ -51,6 +51,8 @@ impl RewardCalculator {
         let mut res = HashMap::new();
         let num_validators = validator_block_chunk_stats.len();
         println!("Mirko: IDEMO U GAZENJE");
+        println!("Mirko: genesis_protocol_version {}", genesis_protocol_version);
+        println!("Mirko: (epoch) protocol_version {}", protocol_version);
         let use_hardcoded_value = genesis_protocol_version < protocol_version
             && protocol_version >= ENABLE_INFLATION_PROTOCOL_VERSION;
         println!("Mirko: use_hardcoded_value: {}", use_hardcoded_value);
