@@ -544,6 +544,7 @@ impl RunCmd {
             )
             .expect("start_with_config");
 
+            println!("Mirko: prije pocetka loopa u run cmdu");
             let sig = loop {
                 let sig = wait_for_interrupt_signal(home_dir, &mut rx_crash).await;
                 if sig == "SIGHUP" {
