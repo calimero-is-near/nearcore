@@ -135,7 +135,7 @@ pub const NETWORK_TELEMETRY_URL: &str = "https://explorer.{}.near.org/api/nodes"
 pub const GAS_PRICE_ADJUSTMENT_RATE: Rational32 = Rational32::new_raw(1, 100);
 
 /// Protocol treasury reward
-pub const PROTOCOL_REWARD_RATE: Rational32 = Rational32::new_raw(1, 10);
+pub const PROTOCOL_REWARD_RATE: Rational32 = Rational32::new_raw(1, 22); //TODO: ovo sam promijenio
 
 /// Maximum inflation rate per year
 pub const MAX_INFLATION_RATE: Rational32 = Rational32::new_raw(1, 20);
