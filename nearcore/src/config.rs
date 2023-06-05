@@ -1401,6 +1401,8 @@ pub fn load_config(
     dir: &Path,
     genesis_validation: GenesisValidationMode,
 ) -> anyhow::Result<NearConfig> {
+    println!("Mirko: u funkciji load_config raspakiravam jsone");
+    
     let mut validation_errors = ValidationErrors::new();
 
     // if config.json has file issues, the program will directly panic
@@ -1410,6 +1412,7 @@ pub fn load_config(
         validation_errors.push_errors(e)
     };
 
+    // Mirko: ovdje samo validira validator key file (doslovno public i private key za svaki node) -> validator kao onaj u networku (PoS)
     let validator_file = dir.join(&config.validator_key_file);
     let validator_signer = if validator_file.exists() {
         match InMemoryValidatorSigner::from_file(&validator_file) {
@@ -1427,6 +1430,7 @@ pub fn load_config(
         None
     };
 
+    // Mirko: isto kao i ranije efektivno (doslovno isti keypair)
     let node_key_path = dir.join(&config.node_key_file);
     let network_signer_result = NodeKeyFile::from_file(&node_key_path);
     let network_signer = match network_signer_result {
@@ -1439,6 +1443,7 @@ pub fn load_config(
         }
     };
 
+    // Mirko: config.genesis_file ovo je "genesis.json"
     let genesis_file = dir.join(&config.genesis_file);
     let genesis_result = match &config.genesis_records_file {
         // only load Genesis from file. Skip test for now.
