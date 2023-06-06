@@ -1441,6 +1441,7 @@ pub fn load_config(
 
     println!("Mirko: brija prije raspakiravanja genesisa");
     let genesis_file = dir.join(&config.genesis_file);
+    println!("Mirko: genesis file path {:?}", genesis_file);
     let genesis_result = match &config.genesis_records_file {
         // only load Genesis from file. Skip test for now.
         // this allows us to know the chain_id in order to check tracked_shards even if semantics checks fail.
