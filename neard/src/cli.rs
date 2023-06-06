@@ -55,6 +55,8 @@ impl NeardCmd {
         )
         .local();
 
+        println!("Mirko: opts: {:?}", neard_cmd.opts);
+
         info!(
             target: "neard",
             version = crate::NEARD_VERSION,

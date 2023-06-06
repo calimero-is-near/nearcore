@@ -1453,6 +1453,9 @@ pub fn load_config(
         None => Genesis::from_file(&genesis_file, GenesisValidationMode::UnsafeFast),
     };
 
+    // TODO: tu dodaj patch gazenje
+
+
     let genesis = match genesis_result {
         Ok(genesis) => {
             if let Err(e) = genesis.validate(genesis_validation) {
