@@ -6,7 +6,7 @@ use primitive_types::U256;
 use near_chain_configs::GenesisConfig;
 use near_primitives::checked_feature;
 use near_primitives::types::{AccountId, Balance, BlockChunkValidatorStats};
-use near_primitives::version::{ProtocolVersion, ENABLE_INFLATION_PROTOCOL_VERSION};
+use near_primitives::version::ProtocolVersion;
 
 pub(crate) const NUM_NS_IN_SECOND: u64 = 1_000_000_000;
 pub const NUM_SECONDS_IN_A_YEAR: u64 = 24 * 60 * 60 * 365;
@@ -53,18 +53,6 @@ impl RewardCalculator {
         println!("Mirko: IDEMO U GAZENJE");
         println!("Mirko: genesis_protocol_version {}", genesis_protocol_version);
         println!("Mirko: (epoch) protocol_version {}", protocol_version);
-        let use_hardcoded_value = genesis_protocol_version < protocol_version
-            && protocol_version >= ENABLE_INFLATION_PROTOCOL_VERSION;
-        println!("Mirko: use_hardcoded_value: {}", use_hardcoded_value);
-        let max_inflation_rate =
-            if use_hardcoded_value { Rational32::new_raw(1, 20) } else { self.max_inflation_rate };
-        let protocol_reward_rate = if use_hardcoded_value {
-            println!("Mirko: protocol_reward_rate gazi sa novim raw vrijednostima");
-            Rational32::new_raw(1, 10)
-        } else {
-            println!("Mirko: protocol_reward_rate koristi self.protocol_reward_rate");
-            self.protocol_reward_rate
-        };
         let epoch_total_reward: u128 =
             if checked_feature!("stable", RectifyInflation, protocol_version) {
                 (U256::from(*max_inflation_rate.numer() as u64)
