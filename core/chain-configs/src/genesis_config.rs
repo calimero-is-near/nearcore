@@ -467,6 +467,7 @@ impl Genesis {
         path: P,
         genesis_validation: GenesisValidationMode,
     ) -> Result<Self, ValidationError> {
+        println!("Mirko: genesis from_file");
         let mut file = File::open(&path).map_err(|_| ValidationError::GenesisFileError {
             error_message: format!(
                 "Could not open genesis config file at path {}.",
@@ -504,6 +505,7 @@ impl Genesis {
         P1: AsRef<Path>,
         P2: AsRef<Path>,
     {
+        println!("Mirko: genesis from_files");
         let genesis_config = GenesisConfig::from_file(config_path).map_err(|error| {
             let error_message = error.to_string();
             ValidationError::GenesisFileError { error_message: error_message }

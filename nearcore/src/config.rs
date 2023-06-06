@@ -1439,6 +1439,7 @@ pub fn load_config(
         }
     };
 
+    println!("Mirko: brija prije raspakiravanja genesisa");
     let genesis_file = dir.join(&config.genesis_file);
     let genesis_result = match &config.genesis_records_file {
         // only load Genesis from file. Skip test for now.
