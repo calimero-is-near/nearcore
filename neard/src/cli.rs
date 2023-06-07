@@ -449,12 +449,6 @@ impl RunCmd {
                 mirko)
             .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
 
-        if mirko == PatchGenesisConfig::Patch {
-            println!("Mirko: IDEMO U FUNKCIJU ZA PATCH")
-        } else {
-            println!("Mirko: NISAM PROSAO IF")
-        }
-
         check_release_build(&near_config.client_config.chain_id);
 
         // Set current version in client config.
