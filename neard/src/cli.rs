@@ -409,9 +409,10 @@ pub(super) struct RunCmd {
     /// configuration will be taken.
     #[clap(long)]
     max_gas_burnt_view: Option<Gas>,
-    // TODO: sluzi za patch configa
+    // TODO: dodaj komentar
     #[clap(long)]
     gazenje: Option<bool>,
+    //patch_genesis: Option<bool>,
 }
 
 impl RunCmd {
@@ -424,6 +425,12 @@ impl RunCmd {
     ) {
         println!("Mirko: u runu sam");
         println!("Mirko: RunCmd self: {:?}", self);
+        if self.gazenje.is_some() && self.gazenje.unwrap() {
+            println!("Mirko: PROSAO SAM IF")
+        } else {
+            println!("Mirko: NISAM PROSAO IF")
+        }
+
         // Load configs from home.
         let mut near_config = nearcore::config::load_config(home_dir, genesis_validation)
             .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
