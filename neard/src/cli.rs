@@ -446,10 +446,10 @@ impl RunCmd {
         let mut near_config = nearcore::config::load_config(
                 home_dir,
                 genesis_validation,
-                self.gazenje.unwrap())
+                mirko)
             .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
 
-        if self.gazenje.unwrap() == PatchGenesisConfig::Patch {
+        if mirko == PatchGenesisConfig::Patch {
             println!("Mirko: IDEMO U FUNKCIJU ZA PATCH")
         } else {
             println!("Mirko: NISAM PROSAO IF")
