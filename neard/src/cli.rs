@@ -332,6 +332,7 @@ fn check_release_build(chain: &str) {
 
 impl InitCmd {
     pub(super) fn run(self, home_dir: &Path) -> anyhow::Result<()> {
+        println!("Mirko: u initu sam");
         // TODO: Check if `home` exists. If exists check what networks we already have there.
         if (self.download_genesis || self.download_genesis_url.is_some()) && self.genesis.is_some()
         {
@@ -418,6 +419,7 @@ impl RunCmd {
         verbose_target: Option<&str>,
         o11y_opts: &near_o11y::Options,
     ) {
+        println!("Mirko: u runu sam");
         // Load configs from home.
         let mut near_config = nearcore::config::load_config(home_dir, genesis_validation)
             .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
