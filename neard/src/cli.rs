@@ -363,7 +363,7 @@ impl InitCmd {
     }
 }
 
-#[derive(clap::Parser)]
+#[derive(clap::Parser, Debug)]
 pub(super) struct RunCmd {
     /// Configure node to run as archival node which prevents deletion of old
     /// blocks.  This is a persistent setting; once client is started as
@@ -420,6 +420,7 @@ impl RunCmd {
         o11y_opts: &near_o11y::Options,
     ) {
         println!("Mirko: u runu sam");
+        println!("Mirko: RunCmd self: {:?}", self);
         // Load configs from home.
         let mut near_config = nearcore::config::load_config(home_dir, genesis_validation)
             .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
