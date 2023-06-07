@@ -427,18 +427,21 @@ impl RunCmd {
         println!("Mirko: u runu sam");
         println!("Mirko: RunCmd self: {:?}", self);
 
+        /*
         let patch_genesis_config = if self.gazenje {
             PatchGenesisConfig::Patch
         } else {
             PatchGenesisConfig::Skip
         };
 
+         */
+
         // Load configs from home.
         println!("Mirko: override_genesis_with_patch: {}", override_genesis_with_patch);
         let mut near_config = nearcore::config::load_config(
                 home_dir,
                 genesis_validation,
-                patch_genesis_config)
+                self.gazenje)
             .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
 
         if patch_genesis_config == PatchGenesisConfig::Patch {
