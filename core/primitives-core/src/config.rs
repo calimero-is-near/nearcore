@@ -565,7 +565,7 @@ impl ExtCosts {
     }
 }
 
-#[derive(Clap, Clone, Debug, PartialEq)]
+#[derive(Clap::Parser, Clone, Debug, PartialEq)]
 pub enum PatchGenesisConfig {
     /// Genesis config override with values from patch file.
     Patch = 0,
