@@ -39,6 +39,7 @@ use std::time::Duration;
 #[cfg(test)]
 use tempfile::tempdir;
 use tracing::{info, warn};
+use near_primitives::config::PatchGenesisConfig;
 
 /// Initial balance used in tests.
 pub const TESTING_INIT_BALANCE: Balance = 1_000_000_000 * NEAR_BASE;
@@ -1400,7 +1401,7 @@ impl From<NodeKeyFile> for KeyFile {
 pub fn load_config(
     dir: &Path,
     genesis_validation: GenesisValidationMode,
-    _patch_genesis_config: bool,
+    _patch_genesis_config: PatchGenesisConfig,
 ) -> anyhow::Result<NearConfig> {
     let mut validation_errors = ValidationErrors::new();
 

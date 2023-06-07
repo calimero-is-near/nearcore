@@ -564,3 +564,10 @@ impl ExtCosts {
         }
     }
 }
+
+pub enum PatchGenesisConfig {
+    /// Genesis config override with values from patch file.
+    Patch,
+    /// Skip genesis config overrides.
+    Skip,
+}

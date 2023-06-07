@@ -107,7 +107,7 @@ impl StateViewerSubCommand {
         mode: Mode,
         temperature: Temperature,
     ) {
-        let near_config = load_config(home_dir, genesis_validation)
+        let near_config = load_config(home_dir, genesis_validation, false)
             .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
 
         let cold_config: Option<&near_store::StoreConfig> = near_config.config.cold_store.as_ref();

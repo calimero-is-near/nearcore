@@ -15,6 +15,7 @@ use near_o11y::{
     EnvFilterBuilder,
 };
 use near_ping::PingCommand;
+use near_primitives::config::PatchGenesisConfig;
 use near_primitives::hash::CryptoHash;
 use near_primitives::merkle::compute_root_from_path;
 use near_primitives::types::{Gas, NumSeats, NumShards};
@@ -411,7 +412,7 @@ pub(super) struct RunCmd {
     max_gas_burnt_view: Option<Gas>,
     // TODO: dodaj komentar
     #[clap(long)]
-    gazenje: Option<bool>,
+    gazenje: Option<PatchGenesisConfig>,
     //patch_genesis: Option<bool>,
 }
 
@@ -427,7 +428,12 @@ impl RunCmd {
         println!("Mirko: RunCmd self: {:?}", self);
 
         // Load configs from home.
-        let patch_genesis_config = self.gazenje.is_some() & self.gazenje.unwrap();
+        let patch_genesis_config = if self.gazenje {
+            PatchGenesisConfig::Patch
+        } else {
+            PatchGenesisConfig::Skip
+        };
+
         println!("Mirko: override_genesis_with_patch: {}", override_genesis_with_patch);
         let mut near_config = nearcore::config::load_config(
                 home_dir,
@@ -435,7 +441,7 @@ impl RunCmd {
                 patch_genesis_config)
             .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
 
-        if self.gazenje.is_some() && self.gazenje.unwrap() {
+        if patch_genesis_config == PatchGenesisConfig::Patch {
             println!("Mirko: IDEMO U FUNKCIJU ZA PATCH")
         } else {
             println!("Mirko: NISAM PROSAO IF")

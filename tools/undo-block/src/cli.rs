@@ -14,7 +14,7 @@ impl UndoBlockCommand {
         home_dir: &Path,
         genesis_validation: GenesisValidationMode,
     ) -> anyhow::Result<()> {
-        let near_config = load_config(home_dir, genesis_validation)
+        let near_config = load_config(home_dir, genesis_validation, false)
             .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
 
         let store_opener = NodeStorage::opener(
