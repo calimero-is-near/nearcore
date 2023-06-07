@@ -412,8 +412,7 @@ pub(super) struct RunCmd {
     max_gas_burnt_view: Option<Gas>,
     // TODO: dodaj komentar
     #[clap(long)]
-    gazenje: Option<PatchGenesisConfig>,
-    //patch_genesis: Option<bool>,
+    gazenje: Option<bool>,
 }
 
 impl RunCmd {
@@ -435,6 +434,12 @@ impl RunCmd {
         };
 
          */
+
+        let mirko = if self.gazenje.is_some() && self.gazenje.unwrap() {
+            PatchGenesisConfig::Patch
+        } else {
+            PatchGenesisConfig::Skip
+        }
 
         // Load configs from home.
         // println!("Mirko: override_genesis_with_patch: {}", override_genesis_with_patch);

@@ -565,8 +565,7 @@ impl ExtCosts {
     }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-#[stable(feature = "rust1", since = "1.0.0")]
+#[derive(Debug, PartialEq)]
 pub enum PatchGenesisConfig {
     /// Genesis config override with values from patch file.
     Patch = 0,
