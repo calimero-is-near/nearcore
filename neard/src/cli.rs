@@ -425,15 +425,21 @@ impl RunCmd {
     ) {
         println!("Mirko: u runu sam");
         println!("Mirko: RunCmd self: {:?}", self);
+
+        // Load configs from home.
+        let override_genesis_with_patch = self.gazenje.is_some() & self.gazenje.unwrap();
+        println!("Mirko: override_genesis_with_patch: {}", override_genesis_with_patch);
+        let mut near_config = nearcore::config::load_config(
+                home_dir,
+                genesis_validation,
+                override_genesis_with_patch)
+            .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
+
         if self.gazenje.is_some() && self.gazenje.unwrap() {
-            println!("Mirko: PROSAO SAM IF")
+            println!("Mirko: IDEMO U FUNKCIJU ZA PATCH")
         } else {
             println!("Mirko: NISAM PROSAO IF")
         }
-
-        // Load configs from home.
-        let mut near_config = nearcore::config::load_config(home_dir, genesis_validation)
-            .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
 
         check_release_build(&near_config.client_config.chain_id);
 
