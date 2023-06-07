@@ -3,6 +3,7 @@ use genesis_populate::GenesisBuilder;
 use near_chain_configs::GenesisValidationMode;
 use nearcore::{get_default_home, load_config};
 use std::path::PathBuf;
+use near_primitives::config::PatchGenesisConfig;
 
 fn main() {
     let matches = Command::new("Genesis populator")
@@ -31,7 +32,7 @@ fn main() {
         .get_one::<String>("additional-accounts-num")
         .map(|x| x.parse::<u64>().expect("Failed to parse number of additional accounts."))
         .unwrap();
-    let near_config = load_config(home_dir, GenesisValidationMode::Full)
+    let near_config = load_config(home_dir, GenesisValidationMode::Full, PatchGenesisConfig::Skip)
         .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
 
     let store = near_store::NodeStorage::opener(

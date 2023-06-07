@@ -19,6 +19,7 @@ use near_store::{DBCol, Mode, NodeStorage, Store, StoreUpdate};
 use nearcore::NightshadeRuntime;
 use std::fs;
 use std::path::Path;
+use near_primitives::config::PatchGenesisConfig;
 
 #[derive(serde::Serialize, BorshSerialize, BorshDeserialize)]
 pub struct BlockCheckpoint {
@@ -221,7 +222,7 @@ fn load_snapshot(load_cmd: LoadCmd) {
     )
     .unwrap();
 
-    let config = nearcore::config::load_config(&home_dir, GenesisValidationMode::UnsafeFast)
+    let config = nearcore::config::load_config(&home_dir, GenesisValidationMode::UnsafeFast, PatchGenesisConfig::Skip)
         .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
     let store = NodeStorage::opener(home_dir, config.config.archive, &Default::default(), None)
         .open()

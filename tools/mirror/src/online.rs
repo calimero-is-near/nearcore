@@ -21,6 +21,7 @@ use near_primitives_core::types::ShardId;
 use std::path::Path;
 use std::sync::Arc;
 use std::time::Duration;
+use near_primitives::config::PatchGenesisConfig;
 
 pub(crate) struct ChainAccess {
     view_client: Addr<ViewClientActor>,
@@ -29,7 +30,7 @@ pub(crate) struct ChainAccess {
 impl ChainAccess {
     pub(crate) fn new<P: AsRef<Path>>(home: P) -> anyhow::Result<Self> {
         let config =
-            nearcore::config::load_config(home.as_ref(), GenesisValidationMode::UnsafeFast)
+            nearcore::config::load_config(home.as_ref(), GenesisValidationMode::UnsafeFast, PatchGenesisConfig::Skip)
                 .with_context(|| format!("Error loading config from {:?}", home.as_ref()))?;
 
         let node = nearcore::start_with_config(home.as_ref(), config)
