@@ -565,9 +565,7 @@ impl ExtCosts {
     }
 }
 
-#[derive(Clap::Parser, Clone, Debug, PartialEq)]
-#[clap(version = "0.1", author = "Near Inc. <hello@nearprotocol.com>")]
-#[clap(subcommand_required = true, arg_required_else_help = true)]
+#[derive(Clone, Debug, PartialEq)]
 pub enum PatchGenesisConfig {
     /// Genesis config override with values from patch file.
     Patch = 0,
