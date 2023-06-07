@@ -437,7 +437,7 @@ impl RunCmd {
          */
 
         // Load configs from home.
-        println!("Mirko: override_genesis_with_patch: {}", override_genesis_with_patch);
+        // println!("Mirko: override_genesis_with_patch: {}", override_genesis_with_patch);
         let mut near_config = nearcore::config::load_config(
                 home_dir,
                 genesis_validation,
