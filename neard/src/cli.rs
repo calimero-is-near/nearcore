@@ -426,15 +426,6 @@ impl RunCmd {
         println!("Mirko: u runu sam");
         println!("Mirko: RunCmd self: {:?}", self);
 
-        /*
-        let patch_genesis_config = if self.gazenje {
-            PatchGenesisConfig::Patch
-        } else {
-            PatchGenesisConfig::Skip
-        };
-
-         */
-
         let patch_genesis_config = if self.gazenje.is_some() && self.gazenje.unwrap() {
             PatchGenesisConfig::Patch
         } else {
