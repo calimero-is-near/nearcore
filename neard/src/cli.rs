@@ -439,7 +439,7 @@ impl RunCmd {
             PatchGenesisConfig::Patch
         } else {
             PatchGenesisConfig::Skip
-        }
+        };
 
         // Load configs from home.
         // println!("Mirko: override_genesis_with_patch: {}", override_genesis_with_patch);
