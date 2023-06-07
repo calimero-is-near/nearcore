@@ -568,7 +568,7 @@ impl ExtCosts {
 #[derive(Clone, Debug, PartialEq)]
 pub enum PatchGenesisConfig {
     /// Genesis config override with values from patch file.
-    Patch,
+    Patch = 0,
     /// Skip genesis config overrides.
-    Skip,
+    Skip = 1,
 }
