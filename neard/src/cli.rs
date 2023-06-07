@@ -435,7 +435,7 @@ impl RunCmd {
 
          */
 
-        let mirko = if self.gazenje.is_some() && self.gazenje.unwrap() {
+        let patch_genesis_config = if self.gazenje.is_some() && self.gazenje.unwrap() {
             PatchGenesisConfig::Patch
         } else {
             PatchGenesisConfig::Skip
@@ -446,7 +446,7 @@ impl RunCmd {
         let mut near_config = nearcore::config::load_config(
                 home_dir,
                 genesis_validation,
-                mirko)
+                patch_genesis_config)
             .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
 
         check_release_build(&near_config.client_config.chain_id);

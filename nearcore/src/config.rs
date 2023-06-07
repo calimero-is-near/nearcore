@@ -1401,7 +1401,7 @@ impl From<NodeKeyFile> for KeyFile {
 pub fn load_config(
     dir: &Path,
     genesis_validation: GenesisValidationMode,
-    _patch_genesis_config: PatchGenesisConfig,
+    patch_genesis_config: PatchGenesisConfig,
 ) -> anyhow::Result<NearConfig> {
     let mut validation_errors = ValidationErrors::new();
 
@@ -1456,7 +1456,11 @@ pub fn load_config(
     };
 
     // TODO: tu dodaj patch gazenje
-
+    if patch_genesis_config == PatchGenesisConfig::Patch {
+        println!("Mirko: ispod TODOa ide patch")
+    } else {
+        println!("Mirko: ispod TODOa NE ide patch")
+    }
 
     let genesis = match genesis_result {
         Ok(genesis) => {
