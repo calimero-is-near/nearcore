@@ -444,7 +444,7 @@ impl RunCmd {
                 self.gazenje.unwrap())
             .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
 
-        if patch_genesis_config == PatchGenesisConfig::Patch {
+        if self.gazenje.unwrap() == PatchGenesisConfig::Patch {
             println!("Mirko: IDEMO U FUNKCIJU ZA PATCH")
         } else {
             println!("Mirko: NISAM PROSAO IF")
