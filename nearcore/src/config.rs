@@ -120,6 +120,7 @@ pub const MINIMUM_STAKE_DIVISOR: u64 = 10;
 
 pub const CONFIG_FILENAME: &str = "config.json";
 pub const GENESIS_CONFIG_FILENAME: &str = "genesis.json";
+pub const GENESIS_PATCH_CONFIG_FILENAME: &str = "genesis_patch.json";
 pub const NODE_KEY_FILE: &str = "node_key.json";
 pub const VALIDATOR_KEY_FILE: &str = "validator_key.json";
 
@@ -277,6 +278,7 @@ impl Default for Consensus {
 pub struct Config {
     pub genesis_file: String,
     pub genesis_records_file: Option<String>,
+    pub genesis_patch_file: String,
     pub validator_key_file: String,
     pub node_key_file: String,
     #[cfg(feature = "json_rpc")]
@@ -349,6 +351,7 @@ impl Default for Config {
         Config {
             genesis_file: GENESIS_CONFIG_FILENAME.to_string(),
             genesis_records_file: None,
+            genesis_patch_file: GENESIS_PATCH_CONFIG_FILENAME.to_string(),
             validator_key_file: VALIDATOR_KEY_FILE.to_string(),
             node_key_file: NODE_KEY_FILE.to_string(),
             #[cfg(feature = "json_rpc")]
