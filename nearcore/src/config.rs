@@ -957,6 +957,7 @@ pub fn init_configs(
         // Check that `node_key.json` and `validator_key.json` exist.
         // Create if needed and they don't exist.
         generate_or_load_keys(dir, &config, &chain_id, account_id, test_seed)?;
+        println!("Mirko: field iz configa 2: {}", config.genesis_patch_file);
         return Ok(());
     }
 
