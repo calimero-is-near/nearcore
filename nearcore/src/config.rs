@@ -1400,7 +1400,7 @@ impl From<NodeKeyFile> for KeyFile {
 pub fn load_config(
     dir: &Path,
     genesis_validation: GenesisValidationMode,
-    override_genesis_with_patch: bool,
+    _patch_genesis_config: bool,
 ) -> anyhow::Result<NearConfig> {
     let mut validation_errors = ValidationErrors::new();
 
