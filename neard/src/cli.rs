@@ -441,7 +441,7 @@ impl RunCmd {
         let mut near_config = nearcore::config::load_config(
                 home_dir,
                 genesis_validation,
-                self.gazenje)
+                self.gazenje.unwrap())
             .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
 
         if patch_genesis_config == PatchGenesisConfig::Patch {
