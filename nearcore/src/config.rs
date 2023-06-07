@@ -939,6 +939,7 @@ pub fn init_configs(
 
     // Check if config already exists in home dir.
     if dir.join(CONFIG_FILENAME).exists() {
+        println!("Mirko: Vec ima configa");
         let config = Config::from_file(&dir.join(CONFIG_FILENAME))
             .with_context(|| anyhow!("Failed to read config {}", dir.display()))?;
         let genesis_file = config.genesis_file.clone();
