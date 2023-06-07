@@ -962,6 +962,8 @@ pub fn init_configs(
 
     let mut config = Config::default();
 
+    println!("Mirko: field iz configa: {}", config.genesis_patch_file);
+
     if let Some(url) = download_config_url {
         download_config(url, &dir.join(CONFIG_FILENAME))
             .context(format!("Failed to download the config file from {}", url))?;
