@@ -409,6 +409,9 @@ pub(super) struct RunCmd {
     /// configuration will be taken.
     #[clap(long)]
     max_gas_burnt_view: Option<Gas>,
+    // TODO: sluzi za patch configa
+    #[clap(long)]
+    gazenje: Option<bool>,
 }
 
 impl RunCmd {
