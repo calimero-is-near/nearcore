@@ -937,6 +937,7 @@ pub fn init_configs(
         None => random_chain_id(),
     };
 
+    println!("Mirko: ispred config odluke");
     // Check if config already exists in home dir.
     if dir.join(CONFIG_FILENAME).exists() {
         println!("Mirko: Vec ima configa");
