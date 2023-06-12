@@ -469,7 +469,7 @@ impl Genesis {
 
     pub fn from_file_patch<P: AsRef<Path>>(
         path: P,
-    ) -> GenesisConfigPatch {
+    ) -> Result<GenesisConfigPatch, ValidationError> {
         println!("Mirko: usao u from_file_patch");
         let mut file = File::open(&path).map_err(|_| ValidationError::GenesisFileError {
             error_message: format!(
@@ -495,7 +495,7 @@ impl Genesis {
                 }
             })?;
 
-        genesis_patch
+        Ok(genesis_patch)
     }
 
     /// Reads Genesis from a single JSON file, the file can be JSON with comments
