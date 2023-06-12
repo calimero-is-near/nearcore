@@ -281,6 +281,7 @@ pub fn start_with_config_and_synchronization(
         config.client_config.clone(),
         adv.clone(),
     );
+    println!("Mirko: poziva se start_client(");
     let (client_actor, client_arbiter_handle) = start_client(
         config.client_config.clone(),
         chain_genesis.clone(),

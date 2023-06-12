@@ -117,6 +117,7 @@ impl Indexer {
             ",
             indexer_config.home_dir.join("config.json").display()
         );
+        println!("Mirko: tu pozivam nearcore::start_with_config(");
         let nearcore::NearNode { client, view_client, .. } =
             nearcore::start_with_config(&indexer_config.home_dir, near_config.clone())
                 .with_context(|| "start_with_config")?;
