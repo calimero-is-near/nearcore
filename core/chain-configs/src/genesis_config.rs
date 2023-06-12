@@ -77,6 +77,12 @@ fn default_max_kickout_stake_threshold() -> u8 {
 }
 
 #[derive(Debug, Clone, SmartDefault, serde::Serialize, serde::Deserialize)]
+pub struct GenesisConfigPatch {
+    /// Test
+    pub gas_limit: Option<Gas>,
+}
+
+#[derive(Debug, Clone, SmartDefault, serde::Serialize, serde::Deserialize)]
 pub struct GenesisConfig {
     /// Protocol version that this genesis works with.
     pub protocol_version: ProtocolVersion,
@@ -459,6 +465,37 @@ impl Genesis {
         records_file: P,
     ) -> Result<Self, ValidationError> {
         Self::new_with_path_validated(config, records_file, GenesisValidationMode::Full)
+    }
+
+    pub fn from_file_patch<P: AsRef<Path>>(
+        path: P,
+    ) -> GenesisConfigPatch {
+        println!("Mirko: usao u from_file_patch");
+        let mut file = File::open(&path).map_err(|_| ValidationError::GenesisFileError {
+            error_message: format!(
+                "Could not open genesis config file at path {}.",
+                &path.as_ref().display()
+            ),
+        })?;
+
+        let mut json_str = String::new();
+        file.read_to_string(&mut json_str).map_err(|_| ValidationError::GenesisFileError {
+            error_message: "Failed to read genesis config file to string. ".to_string(),
+        })?;
+
+        let json_str_without_comments = near_config_utils::strip_comments_from_json_str(&json_str)
+            .map_err(|_| ValidationError::GenesisFileError {
+                error_message: "Failed to strip comments from genesis config file".to_string(),
+            })?;
+
+        let genesis_patch =
+            serde_json::from_str::<GenesisConfigPatch>(&json_str_without_comments).map_err(|_| {
+                ValidationError::GenesisFileError {
+                    error_message: "Failed to deserialize the genesis records.".to_string(),
+                }
+            })?;
+
+        genesis_patch
     }
 
     /// Reads Genesis from a single JSON file, the file can be JSON with comments

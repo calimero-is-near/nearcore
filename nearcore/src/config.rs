@@ -1468,6 +1468,8 @@ pub fn load_config(
         println!("Mirko: ispod TODOa ide patch");
         let genesis_patch_file = dir.join(&config.genesis_patch_file);
         println!("Mirko: genesis patch file path {:?}", genesis_patch_file);
+
+
     } else {
         println!("Mirko: ispod TODOa NE ide patch");
     }
