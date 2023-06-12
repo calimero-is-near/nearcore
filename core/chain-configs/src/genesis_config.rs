@@ -499,12 +499,14 @@ impl Genesis {
     }
 
     fn merge_json(&self, mut base: Value, patch: Value) -> Value {
-        if let Value::Object(ref mut base_obj) = base {
+        if let Value::Object(mut base_obj) = base {
             if let Value::Object(patch_obj) = patch {
                 for (key, value) in patch_obj {
-                    base_obj.insert(key, self.merge_json(base_obj.remove(&key).unwrap_or_default(), value));
+                    let removed_value = base_obj.remove(&key).unwrap_or_default();
+                    let merged_value = self.merge_json(removed_value, value);
+                    base_obj.insert(key, merged_value);
                 }
-                return Value::Object(base_obj.clone());
+                return Value::Object(base_obj);
             }
         }
         patch
