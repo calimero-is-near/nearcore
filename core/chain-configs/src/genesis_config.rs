@@ -498,7 +498,7 @@ impl Genesis {
         Ok(genesis_patch)
     }
 
-    fn merge_json(&self, mut base: Value, patch: Value) -> Value {
+    fn merge_json(&self, base: Value, patch: Value) -> Value {
         if let Value::Object(mut base_obj) = base {
             if let Value::Object(patch_obj) = patch {
                 for (key, value) in patch_obj {
