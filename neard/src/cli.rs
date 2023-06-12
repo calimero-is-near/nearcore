@@ -535,6 +535,7 @@ impl RunCmd {
                 UpdateableConfigLoader::new(updateable_configs.clone(), tx_config_update);
             let config_updater = ConfigUpdater::new(rx_config_update);
 
+            println!("Mirko: EVO TU pozivam start_with_config_and_synchronization( u runu");
             let nearcore::NearNode {
                 rpc_servers,
                 cold_store_loop_handle,
