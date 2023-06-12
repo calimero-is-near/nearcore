@@ -1990,6 +1990,7 @@ pub fn start_client(
     let client_arbiter = Arbiter::new();
     let client_arbiter_handle = client_arbiter.handle();
     wait_until_genesis(&chain_genesis.time);
+    println!("Mirko: chain_genesis.gas_limit: ", chain_genesis.gas_limit);
     let client = Client::new(
         client_config.clone(),
         chain_genesis,
