@@ -514,7 +514,7 @@ impl Genesis {
 
     fn apply_patch(&mut self, patch: GenesisConfigPatch) {
         let patch_fields = serde_json::to_value(patch).unwrap();
-        let config_fields = serde_json::to_value(self).unwrap();
+        let config_fields = serde_json::to_value(self.clone()).unwrap();
         let merged_fields = self.merge_json(config_fields, patch_fields);
         *self = serde_json::from_value(merged_fields).unwrap();
     }
