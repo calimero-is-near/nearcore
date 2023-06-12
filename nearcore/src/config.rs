@@ -1501,6 +1501,8 @@ pub fn load_config(
         //println!("Mirko: PATCH: {:?}", patch);
 
         genesis.clone().unwrap().apply_patch(patch.unwrap());
+
+        println!("Mirko: GENESIS: {:?}", genesis.clone());
     } else {
         println!("Mirko: ispod TODOa NE ide patch");
     }
