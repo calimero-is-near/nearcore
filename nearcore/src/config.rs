@@ -1504,14 +1504,14 @@ pub fn load_config(
 
         gen.apply_patch(patch.unwrap());
 
-        println!("Mirko: GENESIS: {:?}", genesis.clone());
+        println!("Mirko: GENESIS: {:?}", gen.clone());
     } else {
         println!("Mirko: ispod TODOa NE ide patch");
     }
 
     let near_config = NearConfig::new(
         config,
-        genesis.unwrap(),
+        gen,
         network_signer.unwrap().into(),
         validator_signer,
     )?;
