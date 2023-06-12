@@ -579,6 +579,7 @@ impl Chain {
             )?,
         );
 
+        print("Mirko: cini se da se tu KRSI");
         // Check if we have a head in the store, otherwise pick genesis block.
         let mut store_update = store.store_update();
         let (block_head, header_head) = match store_update.head() {
