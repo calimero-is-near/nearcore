@@ -586,6 +586,7 @@ impl Chain {
             Ok(block_head) => {
                 // Check that genesis in the store is the same as genesis given in the config.
                 let genesis_hash = store_update.get_block_hash_by_height(chain_genesis.height)?;
+                println!("Mirko: prije provjere");
                 if &genesis_hash != genesis.hash() {
                     return Err(Error::Other(format!(
                         "Genesis mismatch between storage and config: {:?} vs {:?}",
@@ -593,6 +594,7 @@ impl Chain {
                         genesis.hash()
                     )));
                 }
+                println!("Mirko: nakon provjere");
 
                 // Check we have the header corresponding to the header_head.
                 let mut header_head = store_update.header_head()?;
