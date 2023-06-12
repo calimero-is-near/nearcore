@@ -1491,6 +1491,8 @@ pub fn load_config(
         panic!("Genesis and network_signer should not be None by now.")
     }
 
+    let mut gen = genesis.unwrap();
+
     // TODO: tu dodaj patch gazenje
     if patch_genesis_config == PatchGenesisConfig::Patch {
         println!("Mirko: ispod TODOa ide patch");
@@ -1500,7 +1502,7 @@ pub fn load_config(
         let patch = Genesis::from_file_patch(&genesis_patch_file);
         //println!("Mirko: PATCH: {:?}", patch);
 
-        genesis.unwrap().apply_patch(patch.unwrap());
+        gen.apply_patch(patch.unwrap());
 
         println!("Mirko: GENESIS: {:?}", genesis.clone());
     } else {
