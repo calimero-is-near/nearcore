@@ -1463,19 +1463,6 @@ pub fn load_config(
         None => Genesis::from_file(&genesis_file, GenesisValidationMode::UnsafeFast),
     };
 
-    // TODO: tu dodaj patch gazenje
-    if patch_genesis_config == PatchGenesisConfig::Patch {
-        println!("Mirko: ispod TODOa ide patch");
-        let genesis_patch_file = dir.join(&config.genesis_patch_file);
-        println!("Mirko: genesis patch file path {:?}", genesis_patch_file);
-
-        let patch = Genesis::from_file_patch(&genesis_patch_file);
-        genesis_result.apply_patch(patch);
-        println!("Mirko: PATCH: {:?}", patch);
-    } else {
-        println!("Mirko: ispod TODOa NE ide patch");
-    }
-
     let genesis = match genesis_result {
         Ok(genesis) => {
             if let Err(e) = genesis.validate(genesis_validation) {
@@ -1503,6 +1490,20 @@ pub fn load_config(
     if genesis.is_none() || network_signer.is_none() {
         panic!("Genesis and network_signer should not be None by now.")
     }
+
+    // TODO: tu dodaj patch gazenje
+    if patch_genesis_config == PatchGenesisConfig::Patch {
+        println!("Mirko: ispod TODOa ide patch");
+        let genesis_patch_file = dir.join(&config.genesis_patch_file);
+        println!("Mirko: genesis patch file path {:?}", genesis_patch_file);
+
+        let patch = Genesis::from_file_patch(&genesis_patch_file);
+        genesis.unwrap().apply_patch(patch.unwrap());
+        println!("Mirko: PATCH: {:?}", patch);
+    } else {
+        println!("Mirko: ispod TODOa NE ide patch");
+    }
+
     let near_config = NearConfig::new(
         config,
         genesis.unwrap(),
