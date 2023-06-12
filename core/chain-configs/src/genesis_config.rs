@@ -467,9 +467,7 @@ impl Genesis {
         Self::new_with_path_validated(config, records_file, GenesisValidationMode::Full)
     }
 
-    pub fn from_file_patch<P: AsRef<Path>>(
-        path: P,
-    ) -> GenesisConfigPatch {
+    pub fn from_file_patch<P: AsRef<Path>>(path: P) -> Result<GenesisConfigPatch, ValidationError> {
         println!("Mirko: usao u from_file_patch");
         let mut file = File::open(&path).map_err(|_| ValidationError::GenesisFileError {
             error_message: format!(
@@ -488,14 +486,12 @@ impl Genesis {
                 error_message: "Failed to strip comments from genesis config file".to_string(),
             })?;
 
-        let genesis_patch =
-            serde_json::from_str::<GenesisConfigPatch>(&json_str_without_comments).map_err(|_| {
-                ValidationError::GenesisFileError {
-                    error_message: "Failed to deserialize the genesis records.".to_string(),
-                }
+        let genesis_patch = serde_json::from_str::<GenesisConfigPatch>(&json_str_without_comments)
+            .map_err(|_| ValidationError::GenesisFileError {
+                error_message: "Failed to deserialize the genesis records.".to_string(),
             })?;
 
-        genesis_patch
+        Ok(genesis_patch)
     }
 
     fn merge_json(&self, base: Value, patch: Value) -> Value {
