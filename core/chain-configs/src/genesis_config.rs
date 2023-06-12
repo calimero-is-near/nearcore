@@ -512,6 +512,13 @@ impl Genesis {
         patch
     }
 
+    fn apply_patch(&mut self, patch: GenesisConfigPatch) {
+        let patch_fields = serde_json::to_value(patch).unwrap();
+        let config_fields = serde_json::to_value(self).unwrap();
+        let merged_fields = self.merge_json(config_fields, patch_fields);
+        *self = serde_json::from_value(merged_fields).unwrap();
+    }
+
     /// Reads Genesis from a single JSON file, the file can be JSON with comments
     /// This function will collect all errors regarding genesis.json and push them to validation_errors
     pub fn from_file<P: AsRef<Path>>(
