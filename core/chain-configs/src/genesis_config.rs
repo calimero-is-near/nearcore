@@ -469,7 +469,7 @@ impl Genesis {
 
     pub fn from_file_patch<P: AsRef<Path>>(
         path: P,
-    ) -> Result<GenesisConfigPatch, ValidationError> {
+    ) -> GenesisConfigPatch {
         println!("Mirko: usao u from_file_patch");
         let mut file = File::open(&path).map_err(|_| ValidationError::GenesisFileError {
             error_message: format!(
@@ -495,7 +495,7 @@ impl Genesis {
                 }
             })?;
 
-        Ok(genesis_patch)
+        genesis_patch
     }
 
     fn merge_json(&self, base: Value, patch: Value) -> Value {

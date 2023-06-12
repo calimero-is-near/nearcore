@@ -1498,9 +1498,9 @@ pub fn load_config(
         println!("Mirko: genesis patch file path {:?}", genesis_patch_file);
 
         let patch = Genesis::from_file_patch(&genesis_patch_file);
-        println!("Mirko: PATCH: {:?}", patch.clone());
+        println!("Mirko: PATCH: {:?}", patch);
 
-        genesis.unwrap().apply_patch(patch.unwrap());
+        // genesis.unwrap().apply_patch(patch.unwrap());
     } else {
         println!("Mirko: ispod TODOa NE ide patch");
     }
