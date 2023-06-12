@@ -72,6 +72,7 @@ fn setup_network_node(
     let network_adapter = Arc::new(LateBoundSender::default());
     let shards_manager_adapter = Arc::new(LateBoundSender::default());
     let adv = near_client::adversarial::Controls::default();
+    println!("Mirko: let client_actor = start_client(");
     let client_actor = start_client(
         client_config.clone(),
         chain_genesis.clone(),
