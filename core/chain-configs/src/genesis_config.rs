@@ -498,6 +498,18 @@ impl Genesis {
         Ok(genesis_patch)
     }
 
+    fn merge_json(mut base: serde_json::Value, patch: serde_json::Value) -> serde_json::Value {
+        if let serde_json::Value::Object(ref mut base_obj) = base {
+            if let serde_json::Value::Object(patch_obj) = patch {
+                for (key, value) in patch_obj {
+                    base_obj.insert(key, merge_json(base_obj.remove(&key).unwrap_or_default(), value));
+                }
+                return serde_json::Value::Object(base_obj.clone());
+            }
+        }
+        patch
+    }
+
     /// Reads Genesis from a single JSON file, the file can be JSON with comments
     /// This function will collect all errors regarding genesis.json and push them to validation_errors
     pub fn from_file<P: AsRef<Path>>(
