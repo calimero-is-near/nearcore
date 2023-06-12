@@ -1500,7 +1500,7 @@ pub fn load_config(
         let patch = Genesis::from_file_patch(&genesis_patch_file);
         //println!("Mirko: PATCH: {:?}", patch);
 
-        genesis.unwrap().apply_patch(patch.unwrap());
+        genesis.clone().unwrap().apply_patch(patch.unwrap());
     } else {
         println!("Mirko: ispod TODOa NE ide patch");
     }
