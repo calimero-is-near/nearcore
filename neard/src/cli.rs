@@ -85,6 +85,7 @@ impl NeardCmd {
             GenesisValidationMode::Full
         };
 
+        println!("Mirko: PRIJE MATCHA");
         match neard_cmd.subcmd {
             NeardSubCommand::Init(cmd) => cmd.run(&home_dir)?,
             NeardSubCommand::Localnet(cmd) => cmd.run(&home_dir),
@@ -648,6 +649,7 @@ impl LocalnetCmd {
     }
 
     pub(super) fn run(self, home_dir: &Path) {
+        println!("Mirko: usao u localnet run");
         let tracked_shards = Self::parse_tracked_shards(&self.tracked_shards, self.shards);
 
         nearcore::config::init_testnet_configs(
