@@ -24,7 +24,7 @@ use near_primitives::{
 use num_rational::Rational32;
 use serde::de::{self, DeserializeSeed, IgnoredAny, MapAccess, SeqAccess, Visitor};
 use serde::{Deserializer, Serialize};
-use serde_json::Serializer;
+use serde_json::{Serializer, Value};
 use sha2::digest::Digest;
 use smart_default::SmartDefault;
 use std::collections::HashSet;
@@ -498,13 +498,13 @@ impl Genesis {
         Ok(genesis_patch)
     }
 
-    fn merge_json(&self, mut base: serde_json::Value, patch: serde_json::Value) -> serde_json::Value {
-        if let serde_json::Value::Object(ref mut base_obj) = base {
-            if let serde_json::Value::Object(patch_obj) = patch {
+    fn merge_json(&self, mut base: Value, patch: Value) -> Value {
+        if let Value::Object(ref mut base_obj) = base {
+            if let Value::Object(patch_obj) = patch {
                 for (key, value) in patch_obj {
                     base_obj.insert(key, self.merge_json(base_obj.remove(&key).unwrap_or_default(), value));
                 }
-                return serde_json::Value::Object(base_obj.clone());
+                return Value::Object(base_obj.clone());
             }
         }
         patch
