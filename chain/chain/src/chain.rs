@@ -585,6 +585,7 @@ impl Chain {
         let (block_head, header_head) = match store_update.head() {
             Ok(block_head) => {
                 // Check that genesis in the store is the same as genesis given in the config.
+                println!("Mirko: VISINA BLOKA ZA KOJEG GLEDAM HASH: {}", chain_genesis.height);
                 let genesis_hash = store_update.get_block_hash_by_height(chain_genesis.height)?;
                 println!("Mirko: prije provjere");
                 if &genesis_hash != genesis.hash() {
