@@ -407,6 +407,8 @@ pub(super) struct RunCmd {
     /// configuration will be taken.
     #[clap(long)]
     max_gas_burnt_view: Option<Gas>,
+    #[clap(long)]
+    patch_config: Option<bool>,
 }
 
 impl RunCmd {
@@ -417,9 +419,18 @@ impl RunCmd {
         verbose_target: Option<&str>,
         o11y_opts: &near_o11y::Options,
     ) {
+        let patch_genesis_config = if self.patch_config.is_some() && self.patch_config.unwrap() {
+            PatchGenesisConfig::Patch
+        } else {
+            PatchGenesisConfig::Skip
+        };
+
         // Load configs from home.
-        let mut near_config = nearcore::config::load_config(home_dir, genesis_validation, PatchGenesisConfig::Skip)
-            .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
+        let mut near_config = nearcore::config::load_config(
+            home_dir,
+            genesis_validation,
+            patch_genesis_config,
+        ).unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
 
         println!("Mirko: genesis patched config: {:?}", near_config.genesis);
 
