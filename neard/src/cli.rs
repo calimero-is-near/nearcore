@@ -407,6 +407,10 @@ pub(super) struct RunCmd {
     /// configuration will be taken.
     #[clap(long)]
     max_gas_burnt_view: Option<Gas>,
+    // To apply patch (or override) of values in genesis file pass true with this flag and prepare
+    // patch file in the same folder as genesis file.
+    // This is used for running forks of Near network (such as Calimero) and customizing genesis
+    // chain config when starting the new network.
     #[clap(long)]
     patch_config: Option<bool>,
 }
