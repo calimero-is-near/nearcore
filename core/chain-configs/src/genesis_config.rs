@@ -517,8 +517,8 @@ impl Genesis {
             })?;
 
         let genesis_patch = serde_json::from_str::<GenesisConfigPatch>(&json_str_without_comments)
-            .map_err(|_| ValidationError::GenesisFileError {
-                error_message: "Failed to deserialize the genesis patch records.".to_string(),
+            .map_err(|e| ValidationError::GenesisFileError {
+                error_message: format!("Failed to deserialize the genesis patch records. Error: {}", e),
             })?;
 
         Ok(genesis_patch)
