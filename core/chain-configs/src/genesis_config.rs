@@ -554,7 +554,7 @@ impl Genesis {
     pub fn apply_patch(&mut self, patch: GenesisConfigPatch) {
         let patch_fields = serde_json::to_value(&patch).expect("Failed to serialize struct");
         let config_fields = serde_json::to_value(self.clone()).unwrap();
-        let merged_fields = self.merge_jsons(config_fields, patch_fields);
+        let merged_fields = merge_jsons(config_fields, patch_fields);
         *self = serde_json::from_value(merged_fields).unwrap();
     }
 
