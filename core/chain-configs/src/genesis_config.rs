@@ -76,7 +76,7 @@ fn default_max_kickout_stake_threshold() -> u8 {
     100
 }
 
-#[derive(Debug, Clone, SmartDefault, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub struct GenesisConfigPatch {
     pub num_block_producer_seats: Option<NumSeats>,
     pub num_block_producer_seats_per_shard: Option<Vec<NumSeats>>,
@@ -501,24 +501,24 @@ impl Genesis {
         println!("Mirko: usao u from_file_patch");
         let mut file = File::open(&path).map_err(|_| ValidationError::GenesisFileError {
             error_message: format!(
-                "Could not open genesis config file at path {}.",
+                "Could not open genesis patch config file at path {}.",
                 &path.as_ref().display()
             ),
         })?;
 
         let mut json_str = String::new();
         file.read_to_string(&mut json_str).map_err(|_| ValidationError::GenesisFileError {
-            error_message: "Failed to read genesis config file to string. ".to_string(),
+            error_message: "Failed to read genesis patch config file to string. ".to_string(),
         })?;
 
         let json_str_without_comments = near_config_utils::strip_comments_from_json_str(&json_str)
             .map_err(|_| ValidationError::GenesisFileError {
-                error_message: "Failed to strip comments from genesis config file".to_string(),
+                error_message: "Failed to strip comments from genesis patch config file".to_string(),
             })?;
 
         let genesis_patch = serde_json::from_str::<GenesisConfigPatch>(&json_str_without_comments)
             .map_err(|_| ValidationError::GenesisFileError {
-                error_message: "Failed to deserialize the genesis records.".to_string(),
+                error_message: "Failed to deserialize the genesis patch records.".to_string(),
             })?;
 
         Ok(genesis_patch)
