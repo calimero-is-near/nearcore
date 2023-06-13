@@ -1500,9 +1500,10 @@ pub fn load_config(
         println!("Mirko: genesis patch file path {:?}", genesis_patch_file);
 
         let patch = Genesis::from_file_patch(&genesis_patch_file);
-        println!("Mirko: PATCH: {:?}", patch.clone().unwrap());
+        let patch_unwraped = patch.unwrap();
+        println!("Mirko: PATCH: {:?}", patch_unwraped.clone());
 
-        gen.apply_patch(patch.unwrap());
+        gen.apply_patch(patch_unwraped);
 
         println!("Mirko: GENESIS: {:?}", gen.clone());
     } else {
