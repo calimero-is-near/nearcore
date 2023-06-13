@@ -85,10 +85,13 @@ pub struct GenesisConfigPatch {
     pub protocol_upgrade_stake_threshold: Option<Rational32>,
     pub epoch_length: Option<BlockHeightDelta>,
     pub gas_limit: Option<Gas>,
+    /*
     #[serde(with = "dec_format")]
     pub min_gas_price: Option<Balance>,
     #[serde(with = "dec_format")]
     pub max_gas_price: Option<Balance>,
+
+     */
     pub block_producer_kickout_threshold: Option<u8>,
     pub chunk_producer_kickout_threshold: Option<u8>,
     pub online_min_threshold: Option<Rational32>,
@@ -98,12 +101,18 @@ pub struct GenesisConfigPatch {
     pub transaction_validity_period: Option<NumBlocks>,
     pub protocol_reward_rate: Option<Rational32>,
     pub max_inflation_rate: Option<Rational32>,
+    /*
     #[serde(with = "dec_format")]
     pub total_supply: Option<Balance>,
+
+     */
     pub num_blocks_per_year: Option<NumBlocks>,
     pub protocol_treasury_account: Option<AccountId>,
+    /*
     #[serde(with = "dec_format")]
     pub fishermen_threshold: Option<Balance>,
+    
+     */
     pub minimum_stake_divisor: Option<u64>,
     pub shard_layout: Option<ShardLayout>,
     pub num_chunk_only_producer_seats: Option<NumSeats>,
