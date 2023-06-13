@@ -111,7 +111,7 @@ pub struct GenesisConfigPatch {
     /*
     #[serde(with = "dec_format")]
     pub fishermen_threshold: Option<Balance>,
-    
+
      */
     pub minimum_stake_divisor: Option<u64>,
     pub shard_layout: Option<ShardLayout>,
@@ -548,6 +548,19 @@ impl Genesis {
     }
 
     pub fn apply_patch(&mut self, patch: GenesisConfigPatch) {
+        let json_value: Value = serde_json::to_value(&patch).expect("Failed to serialize struct");
+
+        if let Value::Object(object) = json_value {
+            for (key, value) in object {
+                println!("Key: {}, Value: {}", key, value);
+                if value.is_some() {
+                    println!("definirano");
+                } else {
+                    println!("none");
+                }
+            }
+        }
+
         println!("Mirko: JEADN");
         let patch_fields = serde_json::to_value(patch).unwrap();
         println!("Mirko: DVA");
