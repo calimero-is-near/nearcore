@@ -76,7 +76,7 @@ fn default_max_kickout_stake_threshold() -> u8 {
     100
 }
 
-#[derive(Debug, Clone, SmartDefault, serde::Serialize, Some(serde::Deserialize))]
+#[derive(Debug, Clone, SmartDefault, serde::Serialize, serde::Deserialize)]
 pub struct GenesisConfigPatch {
     pub num_block_producer_seats: Option<NumSeats>,
     pub num_block_producer_seats_per_shard: Option<Vec<NumSeats>>,
