@@ -536,7 +536,7 @@ impl Genesis {
     }
 
     fn merge_jsons(base: Value, patch: Value) -> Value {
-        if let Value::Object(mut base_obj) = base {
+        if let Value::Object(mut base_obj) = base.clone() {
             if let serde_json::Value::Object(patch_obj) = patch {
                 for (key, value) in patch_obj {
                     if !value.is_null() {
@@ -548,7 +548,7 @@ impl Genesis {
                 return Value::Object(base_obj);
             }
         }
-        return base.clone();
+        return base;
     }
 
     pub fn apply_patch(&mut self, patch: GenesisConfigPatch) {
