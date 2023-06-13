@@ -421,6 +421,8 @@ impl RunCmd {
         let mut near_config = nearcore::config::load_config(home_dir, genesis_validation, PatchGenesisConfig::Skip)
             .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
 
+        println!("Mirko: genesis patched config: {:?}", near_config.genesis);
+
         check_release_build(&near_config.client_config.chain_id);
 
         // Set current version in client config.
