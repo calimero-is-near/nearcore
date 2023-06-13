@@ -78,8 +78,61 @@ fn default_max_kickout_stake_threshold() -> u8 {
 
 #[derive(Debug, Clone, SmartDefault, serde::Serialize, serde::Deserialize)]
 pub struct GenesisConfigPatch {
-    /// Test
+    pub num_block_producer_seats: Option<NumSeats>,
+    pub num_block_producer_seats_per_shard: Option<Vec<NumSeats>>,
+    pub avg_hidden_validator_seats_per_shard: Option<Vec<NumSeats>>,
+    pub dynamic_resharding: Option<bool>,
+    #[serde(default = "default_protocol_upgrade_stake_threshold")]
+    #[default(Rational32::new(8, 10))]
+    pub protocol_upgrade_stake_threshold: Option<Rational32>,
+    pub epoch_length: Option<BlockHeightDelta>,
     pub gas_limit: Option<Gas>,
+    #[serde(with = "dec_format")]
+    pub min_gas_price: Option<Balance>,
+    #[serde(with = "dec_format")]
+    #[default(MAX_GAS_PRICE)]
+    pub max_gas_price: Option<Balance>,
+    pub block_producer_kickout_threshold: Option<u8>,
+    pub chunk_producer_kickout_threshold: Option<u8>,
+    #[serde(default = "default_online_min_threshold")]
+    #[default(Rational32::new(90, 100))]
+    pub online_min_threshold: Option<Rational32>,
+    #[serde(default = "default_online_max_threshold")]
+    #[default(Rational32::new(99, 100))]
+    pub online_max_threshold: Option<Rational32>,
+    #[default(Rational32::from_integer(0))]
+    pub gas_price_adjustment_rate: Option<Rational32>,
+    pub validators: Option<Vec<AccountInfo>>,
+    pub transaction_validity_period: Option<NumBlocks>,
+    #[default(Rational32::from_integer(0))]
+    pub protocol_reward_rate: Option<Rational32>,
+    #[default(Rational32::from_integer(0))]
+    pub max_inflation_rate: Option<Rational32>,
+    #[serde(with = "dec_format")]
+    pub total_supply: Option<Balance>,
+    pub num_blocks_per_year: Option<NumBlocks>,
+    #[default("near".parse().unwrap())]
+    pub protocol_treasury_account: Option<AccountId>,
+    #[serde(with = "dec_format")]
+    pub fishermen_threshold: Option<Balance>,
+    #[serde(default = "default_minimum_stake_divisor")]
+    #[default(10)]
+    pub minimum_stake_divisor: Option<u64>,
+    #[serde(default = "default_shard_layout")]
+    #[default(ShardLayout::v0_single_shard())]
+    pub shard_layout: Option<ShardLayout>,
+    #[serde(default = "default_num_chunk_only_producer_seats")]
+    #[default(300)]
+    pub num_chunk_only_producer_seats: Option<NumSeats>,
+    #[serde(default = "default_minimum_validators_per_shard")]
+    #[default(1)]
+    pub minimum_validators_per_shard: Option<NumSeats>,
+    #[serde(default = "default_max_kickout_stake_threshold")]
+    #[default(100)]
+    pub max_kickout_stake_perc: Option<u8>,
+    #[serde(default = "default_minimum_stake_ratio")]
+    #[default(Rational32::new(160, 1_000_000))]
+    pub minimum_stake_ratio: Option<Rational32>,
 }
 
 #[derive(Debug, Clone, SmartDefault, serde::Serialize, serde::Deserialize)]
