@@ -85,13 +85,12 @@ pub struct GenesisConfigPatch {
     pub protocol_upgrade_stake_threshold: Option<Rational32>,
     pub epoch_length: Option<BlockHeightDelta>,
     pub gas_limit: Option<Gas>,
-    /*
     #[serde(with = "dec_format")]
     pub min_gas_price: Option<Balance>,
+    /*
     #[serde(with = "dec_format")]
     pub max_gas_price: Option<Balance>,
-
-     */
+    */
     pub block_producer_kickout_threshold: Option<u8>,
     pub chunk_producer_kickout_threshold: Option<u8>,
     pub online_min_threshold: Option<Rational32>,
