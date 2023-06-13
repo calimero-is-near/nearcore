@@ -566,7 +566,8 @@ impl Genesis {
         println!("Mirko: TRI");
         let merged_fields = Self::merge_jsons(config_fields, patch_fields);
         println!("Mirko: CETRI");
-        *self.config = serde_json::from_value(merged_fields).unwrap();
+        println!("Mirko: merged_fields: {}", merged_fields);
+        *self = serde_json::from_value(merged_fields).unwrap();
 
     }
 
