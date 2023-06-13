@@ -548,15 +548,15 @@ impl Genesis {
     }
 
     pub fn apply_patch(&mut self, patch: GenesisConfigPatch) {
-        let json_value: Value = serde_json::to_value(&patch).expect("Failed to serialize struct");
+        let json_value = serde_json::to_value(&patch).expect("Failed to serialize struct");
 
-        if let Value::Object(object) = json_value {
+        if let serde_json::Value::Object(object) = json_value {
             for (key, value) in object {
-                println!("Key: {}, Value: {}", key, value);
-                if value.is_some() {
-                    println!("definirano");
+                println!("Key: {}", key);
+                if value.is_null() {
+                    println!("Value: None");
                 } else {
-                    println!("none");
+                    println!("Value: {}", value);
                 }
             }
         }
