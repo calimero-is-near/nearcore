@@ -1475,7 +1475,6 @@ pub fn load_config(
                     }
                     Err(e) => {
                         validation_errors.push_errors(e);
-                        None
                     }
                 }
             }
