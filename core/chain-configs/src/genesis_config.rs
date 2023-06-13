@@ -542,8 +542,8 @@ impl Genesis {
             if let serde_json::Value::Object(patch_obj) = patch {
                 println!("Mirko: U 2. ifu");
                 for (key, value) in patch_obj {
-                    println!(key);
-                    println!(value);
+                    println!("{}", key);
+                    println!("{}", value);
                     if !value.is_null() {
                         let removed_value = base_obj.remove(&key).unwrap_or_default();
                         let merged_value = Self::merge_jsons(removed_value, value);
