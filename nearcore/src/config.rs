@@ -1503,6 +1503,8 @@ pub fn load_config(
         let patch_unwraped = patch.unwrap();
         println!("Mirko: PATCH: {:?}", patch_unwraped.clone());
 
+        println!("Mirko: GENESIS: {:?}", gen.clone());
+
         gen.apply_patch(patch_unwraped);
 
         println!("Mirko: GENESIS: {:?}", gen.clone());
