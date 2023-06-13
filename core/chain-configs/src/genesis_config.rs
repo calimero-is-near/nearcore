@@ -535,20 +535,20 @@ impl Genesis {
         Ok(genesis)
     }
 
-    fn merge_jsons(&self, base: Value, patch: Value) -> Value {
+    fn merge_jsons(base: Value, patch: Value) -> Value {
         if let Value::Object(mut base_obj) = base {
             if let serde_json::Value::Object(patch_obj) = patch {
                 for (key, value) in patch_obj {
                     if !value.is_null() {
                         let removed_value = base_obj.remove(&key).unwrap_or_default();
-                        let merged_value = self.merge_json(removed_value, value);
+                        let merged_value = merge_jsons(removed_value, value);
                         base_obj.insert(key, merged_value);
                     }
                 }
                 return Value::Object(base_obj);
             }
         }
-        return Value::Null;
+        return base.clone();
     }
 
     pub fn apply_patch(&mut self, patch: GenesisConfigPatch) {
