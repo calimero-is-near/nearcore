@@ -555,7 +555,7 @@ impl Genesis {
                 return Value::Object(base_obj);
             }
         }
-        return base;
+        return patch;
     }
 
     pub fn apply_patch(&mut self, patch: GenesisConfigPatch) {
