@@ -86,6 +86,7 @@ pub struct GenesisConfigPatch {
     pub epoch_length: Option<BlockHeightDelta>,
     pub gas_limit: Option<Gas>,
     #[serde(with = "dec_format")]
+    #[serde(default)]
     pub min_gas_price: Option<Balance>,
     /*
     #[serde(with = "dec_format")]
