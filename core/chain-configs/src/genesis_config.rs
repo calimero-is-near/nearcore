@@ -545,9 +545,10 @@ impl Genesis {
                         base_obj.insert(key, merged_value);
                     }
                 }
+                return Value::Object(base_obj);
             }
         }
-        return Value::Object(base_obj);
+        return Value::Null;
     }
 
     pub fn apply_patch(&mut self, patch: GenesisConfigPatch) {
