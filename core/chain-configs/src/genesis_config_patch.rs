@@ -8,6 +8,7 @@ use near_primitives::{
 };
 use num_rational::Rational32;
 use std::fs::File;
+use std::io::Read;
 use std::path::Path;
 
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
