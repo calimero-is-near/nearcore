@@ -1466,14 +1466,11 @@ pub fn load_config(
 
     let genesis = match genesis_result {
         Ok(mut genesis) => {
-            println!("Mirko: usao u genesis");
             if patch_genesis_config == PatchGenesisConfig::Patch {
                 let genesis_patch_file = dir.join(&config.genesis_patch_file);
                 let patch_result = GenesisConfigPatch::from_file(&genesis_patch_file);
-                println!("Mirko: patch_result");
                 match patch_result {
                     Ok(patch) => {
-                        println!("Mirko: patch: {:?}", patch);
                         genesis.apply_patch(patch);
                     }
                     Err(e) => {
