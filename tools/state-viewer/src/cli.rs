@@ -16,6 +16,7 @@ use nearcore::{load_config, NearConfig};
 use std::path::{Path, PathBuf};
 
 use std::str::FromStr;
+use near_primitives::config::PatchGenesisConfig;
 
 #[derive(clap::Subcommand)]
 #[clap(subcommand_required = true, arg_required_else_help = true)]
@@ -104,7 +105,7 @@ impl StateViewerSubCommand {
         mode: Mode,
         temperature: Temperature,
     ) {
-        let near_config = load_config(home_dir, genesis_validation)
+        let near_config = load_config(home_dir, genesis_validation, PatchGenesisConfig::Patch)
             .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
 
         let cold_config: Option<&near_store::StoreConfig> = near_config.config.cold_store.as_ref();

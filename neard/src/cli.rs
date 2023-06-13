@@ -32,6 +32,7 @@ use std::sync::Arc;
 use tokio::sync::broadcast;
 use tokio::sync::broadcast::Receiver;
 use tracing::{debug, error, info, warn};
+use near_primitives::config::PatchGenesisConfig;
 
 /// NEAR Protocol Node
 #[derive(clap::Parser)]
@@ -417,7 +418,7 @@ impl RunCmd {
         o11y_opts: &near_o11y::Options,
     ) {
         // Load configs from home.
-        let mut near_config = nearcore::config::load_config(home_dir, genesis_validation)
+        let mut near_config = nearcore::config::load_config(home_dir, genesis_validation, PatchGenesisConfig::Skip)
             .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
 
         check_release_build(&near_config.client_config.chain_id);
@@ -806,7 +807,7 @@ pub(super) struct ValidateConfigCommand {}
 
 impl ValidateConfigCommand {
     pub(super) fn run(&self, home_dir: &Path) -> anyhow::Result<()> {
-        nearcore::config::load_config(home_dir, GenesisValidationMode::Full)?;
+        nearcore::config::load_config(home_dir, GenesisValidationMode::Full, PatchGenesisConfig::Skip)?;
         Ok(())
     }
 }

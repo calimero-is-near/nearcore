@@ -14,6 +14,7 @@ use nearcore::{load_config, NearConfig, NightshadeRuntime};
 use std::sync::atomic::AtomicBool;
 use std::{path::PathBuf, sync::Arc, time::Duration};
 use tqdm::tqdm;
+use near_primitives::config::PatchGenesisConfig;
 
 #[derive(Parser)]
 pub struct FlatStorageCommand {
@@ -128,7 +129,7 @@ impl FlatStorageCommand {
     }
 
     pub fn run(&self, home_dir: &PathBuf) -> anyhow::Result<()> {
-        let near_config = load_config(home_dir, near_chain_configs::GenesisValidationMode::Full)?;
+        let near_config = load_config(home_dir, near_chain_configs::GenesisValidationMode::Full, PatchGenesisConfig::Skip)?;
         let opener = NodeStorage::opener(home_dir, false, &near_config.config.store, None);
 
         match &self.subcmd {

@@ -13,6 +13,7 @@ pub use near_indexer_primitives::{
     IndexerExecutionOutcomeWithReceipt, IndexerShard, IndexerTransactionWithOutcome,
     StreamerMessage,
 };
+use near_primitives::config::PatchGenesisConfig;
 
 mod streamer;
 
@@ -106,7 +107,7 @@ impl Indexer {
             GenesisValidationMode::UnsafeFast
         };
         let near_config =
-            nearcore::config::load_config(&indexer_config.home_dir, genesis_validation_mode)
+            nearcore::config::load_config(&indexer_config.home_dir, genesis_validation_mode, PatchGenesisConfig::Skip)
                 .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
 
         assert!(

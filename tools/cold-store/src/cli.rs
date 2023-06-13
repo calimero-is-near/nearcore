@@ -16,6 +16,7 @@ use rand::seq::SliceRandom;
 use std::io::Result;
 use std::path::Path;
 use strum::IntoEnumIterator;
+use near_primitives::config::PatchGenesisConfig;
 
 #[derive(clap::Parser)]
 pub struct ColdStoreCommand {
@@ -62,6 +63,7 @@ impl ColdStoreCommand {
         let mut near_config = nearcore::config::load_config(
             &home_dir,
             near_chain_configs::GenesisValidationMode::Full,
+            PatchGenesisConfig::Skip,
         )
         .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
 
