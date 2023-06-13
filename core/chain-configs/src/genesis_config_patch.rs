@@ -52,7 +52,7 @@ pub struct GenesisConfigPatch {
 }
 
 impl GenesisConfigPatch {
-    pub fn from_file_patch<P: AsRef<Path>>(path: P) -> Result<GenesisConfigPatch, ValidationError> {
+    pub fn from_file<P: AsRef<Path>>(path: P) -> Result<GenesisConfigPatch, ValidationError> {
         let mut file = File::open(&path).map_err(|_| ValidationError::GenesisFileError {
             error_message: format!(
                 "Could not open genesis patch config file at path {}.",
