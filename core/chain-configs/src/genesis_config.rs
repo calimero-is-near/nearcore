@@ -536,6 +536,16 @@ impl Genesis {
     }
 
     fn merge_jsons(base: Value, patch: Value) -> Value {
+        let mut base_obj = base.clone().as_object().unwrap().clone();
+        let patch_obj = patch.as_object().unwrap().clone();
+
+        for (key, value) in patch_obj {
+            if !value.is_null() {
+                base_obj.insert(key, value);
+            }
+        }
+
+        Value::Object(base_obj)
         /*
         if let Value::Object(mut base_obj) = base.clone() {
             if let serde_json::Value::Object(patch_obj) = patch {
@@ -551,13 +561,6 @@ impl Genesis {
         }
         return patch;
          */
-        for (key, value) in patch {
-            if !value.is_null() {
-                let removed_value = base.remove(&key).unwrap_or_default();
-                base.insert(key, value);
-            }
-        }
-        return Value::Object(base_obj);
     }
 
     pub fn apply_patch(&mut self, patch: GenesisConfigPatch) {
