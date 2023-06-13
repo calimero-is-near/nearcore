@@ -539,9 +539,13 @@ impl Genesis {
     }
 
     pub fn apply_patch(&mut self, patch: GenesisConfigPatch) {
+        println!("Mirko: JEADN");
         let patch_fields = serde_json::to_value(patch).unwrap();
+        println!("Mirko: DVA");
         let config_fields = serde_json::to_value(self.clone()).unwrap();
+        println!("Mirko: TRI");
         let merged_fields = self.merge_json(config_fields, patch_fields);
+        println!("Mirko: CETRI");
         *self = serde_json::from_value(merged_fields).unwrap();
     }
 
