@@ -541,7 +541,7 @@ impl Genesis {
                 for (key, value) in patch_obj {
                     if !value.is_null() {
                         let removed_value = base_obj.remove(&key).unwrap_or_default();
-                        let merged_value = merge_jsons(removed_value, value);
+                        let merged_value = Self::merge_jsons(removed_value, value);
                         base_obj.insert(key, merged_value);
                     }
                 }
@@ -554,7 +554,7 @@ impl Genesis {
     pub fn apply_patch(&mut self, patch: GenesisConfigPatch) {
         let patch_fields = serde_json::to_value(&patch).expect("Failed to serialize struct");
         let config_fields = serde_json::to_value(self.clone()).unwrap();
-        let merged_fields = merge_jsons(config_fields, patch_fields);
+        let merged_fields = Self::merge_jsons(config_fields, patch_fields);
         *self = serde_json::from_value(merged_fields).unwrap();
     }
 
