@@ -33,6 +33,7 @@ use std::fs::File;
 use std::io::{BufReader, Read};
 use std::path::{Path, PathBuf};
 use tracing::warn;
+use crate::genesis_config_patch::GenesisConfigPatch;
 
 const MAX_GAS_PRICE: Balance = 10_000_000_000_000_000_000_000;
 
@@ -532,6 +533,28 @@ impl Genesis {
 
         genesis.validate(genesis_validation)?;
         Ok(genesis)
+    }
+
+    fn merge_jsons(&self, base: Value, patch: Value) -> Value {
+        if let Value::Object(mut base_obj) = base {
+            if let serde_json::Value::Object(patch_obj) = patch {
+                for (key, value) in patch_obj {
+                    if !value.is_null() {
+                        let removed_value = base_obj.remove(&key).unwrap_or_default();
+                        let merged_value = self.merge_json(removed_value, value);
+                        base_obj.insert(key, merged_value);
+                    }
+                }
+            }
+        }
+        return Value::Object(base_obj);
+    }
+
+    pub fn apply_patch(&mut self, patch: GenesisConfigPatch) {
+        let patch_fields = serde_json::to_value(&patch).expect("Failed to serialize struct");
+        let config_fields = serde_json::to_value(self.clone()).unwrap();
+        let merged_fields = self.merge_jsons(config_fields, patch_fields);
+        *self = serde_json::from_value(merged_fields).unwrap();
     }
 
     /// Reads Genesis from config and records files.
