@@ -1,7 +1,10 @@
 use near_config_utils::ValidationError;
 use near_primitives::shard_layout::ShardLayout;
-use near_primitives::types::{
-    AccountId, AccountInfo, Balance, BlockHeightDelta, Gas, NumBlocks, NumSeats
+use near_primitives::{
+    serialize::dec_format,
+    types::{
+        AccountId, AccountInfo, Balance, BlockHeightDelta, Gas, NumBlocks, NumSeats
+    },
 };
 use num_rational::Rational32;
 use std::fs::File;
