@@ -24,7 +24,7 @@ use near_primitives::{
 use num_rational::Rational32;
 use serde::de::{self, DeserializeSeed, IgnoredAny, MapAccess, SeqAccess, Visitor};
 use serde::{Deserialize, Deserializer, Serialize};
-use serde_json::Serializer;
+use serde_json::{Serializer, Value};
 use sha2::digest::Digest;
 use smart_default::SmartDefault;
 use std::collections::HashSet;

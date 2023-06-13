@@ -4,6 +4,7 @@ pub mod genesis_validate;
 #[cfg(feature = "metrics")]
 mod metrics;
 mod updateable_config;
+mod genesis_config_patch;
 
 pub use client_config::{
     ClientConfig, DumpConfig, ExternalStorageConfig, ExternalStorageLocation, GCConfig,
