@@ -535,11 +535,13 @@ impl Genesis {
 
     fn merge_json(&self, base: Value, patch: Value) -> Value {
         if let Value::Object(mut base_obj) = base {
-            if let Value::Object(patch_obj) = patch {
+            if let serde_json::Value::Object(patch_obj) = patch {
                 for (key, value) in patch_obj {
-                    let removed_value = base_obj.remove(&key).unwrap_or_default();
-                    let merged_value = self.merge_json(removed_value, value);
-                    base_obj.insert(key, merged_value);
+                    if !value.is_null() {
+                        let removed_value = base_obj.remove(&key).unwrap_or_default();
+                        let merged_value = self.merge_json(removed_value, value);
+                        base_obj.insert(key, merged_value);
+                    }
                 }
                 return Value::Object(base_obj);
             }
@@ -562,7 +564,7 @@ impl Genesis {
         }
 
         println!("Mirko: JEADN");
-        let patch_fields = serde_json::to_value(patch).unwrap();
+        let patch_fields = serde_json::to_value(&patch).expect("Failed to serialize struct");
         println!("Mirko: DVA");
         let config_fields = serde_json::to_value(self.clone()).unwrap();
         println!("Mirko: TRI");
