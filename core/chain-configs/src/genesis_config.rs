@@ -545,8 +545,10 @@ impl Genesis {
                     println!("{}", key);
                     println!("{}", value);
                     if !value.is_null() {
+                        println!("{}", value);
                         let removed_value = base_obj.remove(&key).unwrap_or_default();
                         let merged_value = Self::merge_jsons(removed_value, value);
+                        println!("merged_value: {}", merged_value);
                         base_obj.insert(key, merged_value);
                     }
                 }
@@ -564,7 +566,8 @@ impl Genesis {
         println!("Mirko: TRI");
         let merged_fields = Self::merge_jsons(config_fields, patch_fields);
         println!("Mirko: CETRI");
-        *self = serde_json::from_value(merged_fields).unwrap();
+        *self.config = serde_json::from_value(merged_fields).unwrap();
+
     }
 
     /// Reads Genesis from config and records files.
