@@ -432,8 +432,6 @@ impl RunCmd {
             patch_genesis_config,
         ).unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
 
-        println!("Mirko: genesis patched config: {:?}", near_config.genesis);
-
         check_release_build(&near_config.client_config.chain_id);
 
         // Set current version in client config.
