@@ -1,8 +1,8 @@
 use crate::download_file::{run_download_file, FileDownloadError};
 use anyhow::{anyhow, bail, Context};
 use near_chain_configs::{
-    get_initial_supply, ClientConfig, GCConfig, Genesis, GenesisConfig, GenesisValidationMode,
-    LogSummaryStyle, MutableConfigValue, StateSyncConfig,
+    get_initial_supply, ClientConfig, GCConfig, Genesis, GenesisConfig, GenesisConfigPatch,
+    GenesisValidationMode, LogSummaryStyle, MutableConfigValue, StateSyncConfig,
 };
 use near_config_utils::{ValidationError, ValidationErrors};
 use near_crypto::{InMemorySigner, KeyFile, KeyType, PublicKey, Signer};
@@ -11,6 +11,7 @@ use near_jsonrpc::RpcConfig;
 use near_network::config::NetworkConfig;
 use near_network::tcp;
 use near_primitives::account::{AccessKey, Account};
+use near_primitives::config::PatchGenesisConfig;
 use near_primitives::hash::CryptoHash;
 #[cfg(test)]
 use near_primitives::shard_layout::account_id_to_shard_id;
@@ -119,6 +120,7 @@ pub const MINIMUM_STAKE_DIVISOR: u64 = 10;
 
 pub const CONFIG_FILENAME: &str = "config.json";
 pub const GENESIS_CONFIG_FILENAME: &str = "genesis.json";
+pub const GENESIS_PATCH_CONFIG_FILENAME: &str = "genesis_patch.json";
 pub const NODE_KEY_FILE: &str = "node_key.json";
 pub const VALIDATOR_KEY_FILE: &str = "validator_key.json";
 
@@ -280,6 +282,7 @@ impl Default for Consensus {
 pub struct Config {
     pub genesis_file: String,
     pub genesis_records_file: Option<String>,
+    pub genesis_patch_file: String,
     pub validator_key_file: String,
     pub node_key_file: String,
     #[cfg(feature = "json_rpc")]
@@ -360,6 +363,7 @@ impl Default for Config {
         Config {
             genesis_file: GENESIS_CONFIG_FILENAME.to_string(),
             genesis_records_file: None,
+            genesis_patch_file: GENESIS_PATCH_CONFIG_FILENAME.to_string(),
             validator_key_file: VALIDATOR_KEY_FILE.to_string(),
             node_key_file: NODE_KEY_FILE.to_string(),
             #[cfg(feature = "json_rpc")]
@@ -1416,6 +1420,7 @@ impl From<NodeKeyFile> for KeyFile {
 pub fn load_config(
     dir: &Path,
     genesis_validation: GenesisValidationMode,
+    patch_genesis_config: PatchGenesisConfig,
 ) -> anyhow::Result<NearConfig> {
     let mut validation_errors = ValidationErrors::new();
 
@@ -1468,7 +1473,20 @@ pub fn load_config(
     };
 
     let genesis = match genesis_result {
-        Ok(genesis) => {
+        Ok(mut genesis) => {
+            if patch_genesis_config == PatchGenesisConfig::Patch {
+                let genesis_patch_file = dir.join(&config.genesis_patch_file);
+                let patch_result = GenesisConfigPatch::from_file(&genesis_patch_file);
+                match patch_result {
+                    Ok(patch) => {
+                        genesis.apply_patch(patch);
+                    }
+                    Err(e) => {
+                        validation_errors.push_errors(e);
+                    }
+                }
+            }
+
             if let Err(e) = genesis.validate(genesis_validation) {
                 validation_errors.push_errors(e)
             };

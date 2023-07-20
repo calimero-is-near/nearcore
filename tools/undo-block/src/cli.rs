@@ -4,6 +4,7 @@ use near_epoch_manager::EpochManager;
 use near_store::{Mode, NodeStorage};
 use nearcore::load_config;
 use std::path::Path;
+use near_primitives::config::PatchGenesisConfig;
 
 #[derive(clap::Parser)]
 pub struct UndoBlockCommand {
@@ -18,7 +19,7 @@ impl UndoBlockCommand {
         home_dir: &Path,
         genesis_validation: GenesisValidationMode,
     ) -> anyhow::Result<()> {
-        let near_config = load_config(home_dir, genesis_validation)
+        let near_config = load_config(home_dir, genesis_validation, PatchGenesisConfig::Skip)
             .unwrap_or_else(|e| panic!("Error loading config: {:#}", e));
 
         let store_opener = NodeStorage::opener(

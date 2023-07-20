@@ -24,7 +24,7 @@ use near_primitives::{
 use num_rational::Rational32;
 use serde::de::{self, DeserializeSeed, IgnoredAny, MapAccess, SeqAccess, Visitor};
 use serde::{Deserialize, Deserializer, Serialize};
-use serde_json::Serializer;
+use serde_json::{Serializer, Value};
 use sha2::digest::Digest;
 use smart_default::SmartDefault;
 use std::collections::HashSet;
@@ -33,6 +33,7 @@ use std::fs::File;
 use std::io::{BufReader, Read};
 use std::path::{Path, PathBuf};
 use tracing::warn;
+use crate::genesis_config_patch::GenesisConfigPatch;
 
 const MAX_GAS_PRICE: Balance = 10_000_000_000_000_000_000_000;
 
@@ -532,6 +533,26 @@ impl Genesis {
 
         genesis.validate(genesis_validation)?;
         Ok(genesis)
+    }
+
+    fn merge_jsons(base: Value, patch: Value) -> Value {
+        let mut base_obj = base.clone().as_object().unwrap().clone();
+        let patch_obj = patch.as_object().unwrap().clone();
+
+        for (key, value) in patch_obj {
+            if !value.is_null() {
+                base_obj.insert(key, value);
+            }
+        }
+
+        Value::Object(base_obj)
+    }
+
+    pub fn apply_patch(&mut self, patch: GenesisConfigPatch) {
+        let patch_fields = serde_json::to_value(&patch).expect("Failed to serialize struct");
+        let config_fields = serde_json::to_value(self.clone()).unwrap();
+        let merged_fields = Self::merge_jsons(config_fields, patch_fields);
+        *self = serde_json::from_value(merged_fields).unwrap();
     }
 
     /// Reads Genesis from config and records files.
