@@ -28,7 +28,7 @@ pub const CORRECT_RANDOM_VALUE_PROTOCOL_VERSION: ProtocolVersion = 33;
 pub const IMPLICIT_ACCOUNT_CREATION_PROTOCOL_VERSION: ProtocolVersion = 35;
 
 /// The protocol version that enables reward on mainnet.
-pub const ENABLE_INFLATION_PROTOCOL_VERSION: ProtocolVersion = 36;
+pub const ENABLE_INFLATION_PROTOCOL_VERSION: ProtocolVersion = 1000000;
 
 /// Fix upgrade to use the latest voted protocol version instead of the current epoch protocol
 /// version when there is no new change in protocol version.
@@ -201,7 +201,8 @@ pub const PROTOCOL_UPGRADE_SCHEDULE: Lazy<ProtocolUpgradeVotingSchedule> = Lazy:
     // after the set date. Ideally that should be during working hours.
     // e.g. ProtocolUpgradeVotingSchedule::from_env_or_str("2000-01-01 15:00:00").unwrap());
 
-    ProtocolUpgradeVotingSchedule::from_env_or_str("2023-08-01 15:00:00").unwrap() // Tuesday
+    ProtocolUpgradeVotingSchedule::from_env_or_str("2023-08-01 15:00:00").unwrap()
+    // Tuesday
 });
 
 /// Gives new clients an option to upgrade without announcing that they support
