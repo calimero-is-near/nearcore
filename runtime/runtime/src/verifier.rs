@@ -239,13 +239,29 @@ pub fn verify_and_charge_transaction(
                 .into());
             }
             if transaction.receiver_id.as_ref() != function_call_permission.receiver_id {
-                return Err(InvalidTxError::InvalidAccessKeyError(
-                    InvalidAccessKeyError::ReceiverMismatch {
-                        tx_receiver: transaction.receiver_id.clone(),
-                        ak_receiver: function_call_permission.receiver_id.clone(),
-                    },
-                )
-                .into());
+                // Calimero patch
+                let mut key_match = false;
+                if function_call_permission.receiver_id.starts_with("*.") {
+                    let receiver_suffix = &function_call_permission.receiver_id[2..];
+                    if transaction.receiver_id.as_ref() == receiver_suffix {
+                        key_match = true;
+                    } else if transaction.receiver_id.as_ref().ends_with(&format!(".{}", receiver_suffix)) {
+                        let transaction_receiver_subaccount_count = transaction.receiver_id.as_ref().matches(".").count();
+                        let fc_receiver_subaccount_count = function_call_permission.receiver_id.matches(".").count();
+                        if transaction_receiver_subaccount_count == fc_receiver_subaccount_count {
+                            key_match = true;
+                        }
+                    }
+                }
+                if !key_match {
+                    return Err(InvalidTxError::InvalidAccessKeyError(
+                        InvalidAccessKeyError::ReceiverMismatch {
+                            tx_receiver: transaction.receiver_id.clone(),
+                            ak_receiver: function_call_permission.receiver_id.clone(),
+                        },
+                    )
+                    .into());
+                }
             }
             if !function_call_permission.method_names.is_empty()
                 && function_call_permission
@@ -482,9 +498,18 @@ fn validate_add_key_action(
             near_primitives_core::config::AccountIdValidityRulesVersion::V0 => (),
             near_primitives_core::config::AccountIdValidityRulesVersion::V1 => {
                 if let Err(_) = fc.receiver_id.parse::<AccountId>() {
-                    return Err(ActionsValidationError::InvalidAccountId {
-                        account_id: truncate_string(&fc.receiver_id, AccountId::MAX_LEN * 2),
-                    });
+                    // Calimero patch
+                    let mut valid_receiver = false;
+                    if fc.receiver_id.starts_with("*.") {
+                        if let Ok(_) = &fc.receiver_id[2..].parse::<AccountId>() {
+                            valid_receiver = true;
+                        }
+                    }
+                    if !valid_receiver {
+                        return Err(ActionsValidationError::InvalidAccountId {
+                            account_id: truncate_string(&fc.receiver_id, AccountId::MAX_LEN * 2),
+                        });
+                    }
                 }
             }
         }
