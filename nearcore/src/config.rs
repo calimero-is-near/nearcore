@@ -1451,6 +1451,7 @@ pub fn load_config(
     if genesis.is_none() || network_signer.is_none() {
         panic!("Genesis and network_signer should not be None by now.")
     }
+
     let near_config = NearConfig::new(
         config,
         genesis.unwrap(),

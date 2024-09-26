@@ -100,11 +100,64 @@ pub fn proposals_to_epoch_info(
     let mut validator_to_index = HashMap::new();
     let mut block_producers_settlement = Vec::with_capacity(block_producers.len());
 
+    let mut workspace_to_id: HashMap<String, usize> = HashMap::new();
+    let mut workspaces_names: HashSet<String> = HashSet::new();
+    let mut workspace_id_validators: HashMap<usize, Vec<AccountId>> = HashMap::new();
+    let mut workspace_to_validator_ids: HashMap<usize, Vec<ValidatorId>> = HashMap::new();
+    let mut validator_account_id_to_workspace_id: HashMap<AccountId, usize> = HashMap::new();
+
+    println!("VALIDATORS:");
+    let mut num_workspaces: usize = 0;
     for (i, bp) in block_producers.into_iter().enumerate() {
         let id = i as ValidatorId;
         validator_to_index.insert(bp.account_id().clone(), id);
+        println!("VALIDATOR {:?} {:?}", bp.account_id().clone(), id);
         block_producers_settlement.push(id);
+
+        let bp_name = bp.account_id();
+
+        let workspace_name_opt = parse_workspace_name(bp_name.as_str());
+        let workspace_name = match workspace_name_opt {
+            Some(name) => name.to_string(),
+            None => bp_name.to_string(), // not in expected validator format, return whole block producer account as identifier
+        };
+
+        let workspace_id: usize = if workspace_to_id.contains_key(&workspace_name) {
+            *workspace_to_id.get(&workspace_name).unwrap()
+        } else {
+            workspace_to_id.insert(workspace_name,num_workspaces);
+            num_workspaces += 1;
+            num_workspaces - 1
+        };
+
+        workspace_id_validators.entry(workspace_id)
+            .or_insert_with(Vec::new)
+            .push(bp.account_id().clone());
+
+        validator_account_id_to_workspace_id.insert(bp.account_id().clone(),workspace_id);
+
+        workspace_to_validator_ids.entry(workspace_id)
+            .or_insert_with(Vec::new)
+            .push(id);
+
         all_validators.push(bp);
+    }
+
+    println!("Iterate over all workspace id validators");
+    for (key, value) in &workspace_id_validators {
+        println!("Key: '{}', Value: {:?}", key, value);
+    }
+    println!("Iterate over all workspaces to id!");
+    for (key, value) in &workspace_to_id {
+        println!("Key: '{}', Value: {:?}", key, value);
+    }
+    println!("Iterate over all validator account ids to workspace ids");
+    for (key, value) in &validator_account_id_to_workspace_id {
+        println!("Key: '{}', Value: {:?}", key, value);
+    }
+    println!("Iterate over all workspace id to validator ids!");
+    for (key, value) in &workspace_to_validator_ids {
+        println!("Key: '{}', Value: {:?}", key, value);
     }
 
     let chunk_producers_settlement = if checked_feature!("stable", ChunkOnlyProducers, next_version)
@@ -112,7 +165,7 @@ pub fn proposals_to_epoch_info(
         let minimum_validators_per_shard =
             epoch_config.validator_selection_config.minimum_validators_per_shard as usize;
         let shard_assignment =
-            assign_shards(chunk_producers, num_shards, minimum_validators_per_shard).map_err(
+            assign_shards(chunk_producers, num_shards, minimum_validators_per_shard, validator_account_id_to_workspace_id, workspace_to_validator_ids, workspace_id_validators, num_workspaces).map_err(
                 |_| EpochError::NotEnoughValidators {
                     num_validators: num_chunk_producers as u64,
                     num_shards,
@@ -144,6 +197,12 @@ pub fn proposals_to_epoch_info(
                     }
                 }
             }
+        }
+        println!("CHUNK PRODUCERS SETTLEMENT");
+        let mut itt: usize = 0;
+        for v_of_cp in &chunk_producers_settlement {
+            println!("ON SHARD_ID {} -> PRODUCERS ARE {:?}", itt, v_of_cp);
+            itt += 1;
         }
         chunk_producers_settlement
     } else {
@@ -193,6 +252,22 @@ pub fn proposals_to_epoch_info(
         next_version,
         rng_seed,
     ))
+}
+
+/// The workspace validator are always in this format:
+/// format!("validator-ws-{}-{}.{}", i, workspace_ref, env::current_account_id().to_string());
+fn parse_workspace_name(input: &str) -> Option<&str> {
+    // Find the indices of the first three '-' characters and the next '.' character
+    let mut dash_indices = input.match_indices('-').map(|(i, _)| i);
+    let third_dash = dash_indices.nth(2);
+    let dot = input[third_dash.unwrap_or(0)..].find('.').map(|i| i + third_dash.unwrap_or(0));
+
+    if third_dash.is_none() || dot.is_none() {
+        return None;
+    }
+
+    // Extract and return the string between the third '-' and the next '.'
+    Some(&input[third_dash.unwrap() + 1..dot.unwrap()])
 }
 
 /// Generates proposals based on new proposals, last epoch validators/fishermen and validator
